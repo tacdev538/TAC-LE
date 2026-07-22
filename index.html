@@ -48,7 +48,6 @@
         .admin-btn { background: gold !important; color: black !important; }
 
         /* --- SEARCH PAGE --- */
-        /* FIX: Strict Fixed Layout to prevent iPad Safari expanding the map over the bottom bar */
         #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
         .top-bar { flex-shrink: 0; background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 8px; display: flex; gap: 6px; align-items: center; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px; border-radius: 4px; font-size: 13px; min-width: 0; }
@@ -62,7 +61,6 @@
         .perimeter-slider span { font-size: 12px; font-weight: bold; }
 
         .map-wrapper { flex-grow: 1; flex-shrink: 1; min-height: 0; position: relative; overflow: hidden; }
-        /* FIX: Absolute positioning for map so it fits perfectly inside the wrapper */
         #map { position: absolute; top:0; left:0; right:0; bottom:0; width: 100%; height: 100%; background: #111; transition: filter 0.3s; touch-action: none; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
         #map.locked-overlay::after { content: "SEARCH TERMINATED - EVIDENCE LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: white; padding: 20px; font-weight: bold; font-size: 20px; z-index: 9999; text-align: center; border: 2px solid white; }
@@ -95,22 +93,46 @@
         .radar-sweep { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; background: linear-gradient(90deg, rgba(0,255,0,0.4), rgba(0,255,0,0)); transform-origin: left center; animation: radar-spin 3s linear infinite; }
         @keyframes radar-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        #reportArea { background: white; color: black; padding: 20px; font-family: 'Times New Roman', serif; width: 100%; max-width: 800px; margin: 20px auto; border: 1px solid #ccc; }
-        .tac-header { text-align: center; border-bottom: 4px double #002f6c; padding-bottom: 10px; margin-bottom: 20px; }
-        .tac-header h1 { color: #002f6c; margin: 0; font-size: 32px; letter-spacing: 2px; }
-        .tac-header h2 { color: #d4af37; margin: 5px 0 0 0; font-size: 16px; text-transform: uppercase; }
-        .report-field { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        .report-field label { font-weight: bold; display: block; color: #333; font-size: 12px; text-transform: uppercase; }
-        .report-field input, .report-field textarea { width: 100%; border: none; font-size: 16px; font-family: 'Times New Roman', serif; color: #000; background: #f9f9f9; padding: 5px; }
-        .report-log { background: #f1f1f1; padding: 10px; border: 1px solid #ccc; height: 150px; overflow-y: auto; font-size: 12px; }
-        .signature-line { margin-top: 50px; text-align: center; }
-        .signature-line div { border-top: 1px solid black; width: 300px; margin: 0 auto; padding-top: 5px; font-size: 12px; }
+        /* --- PROFESSIONAL REPORT STYLES --- */
+        #reportModal { background: rgba(0,0,0,0.9); }
+        #reportArea { background: #f4f4f4; color: black; padding: 40px; font-family: 'Times New Roman', serif; width: 100%; max-width: 800px; margin: 20px auto; border: 1px solid #ccc; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .tac-header { text-align: center; background: linear-gradient(135deg, #002f6c 0%, #004e92 100%); color: white; padding: 25px; margin: -40px -40px 30px -40px; border-bottom: 6px solid #d4af37; }
+        .tac-header h1 { color: #ffffff; margin: 0; font-size: 42px; letter-spacing: 6px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .tac-header h2 { color: #d4af37; margin: 10px 0 5px 0; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; }
+        .tac-header p { color: #b0c4de; margin: 0; font-size: 12px; font-weight: bold; }
+        
+        .report-section { border: 1px solid #ccc; border-radius: 4px; margin-bottom: 20px; background: white; }
+        .report-section-title { background: #002f6c; color: white; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-bottom: 3px solid #d4af37; }
+        .report-section-body { padding: 15px; }
+        
+        .report-field { margin-bottom: 12px; }
+        .report-field label { font-weight: bold; display: block; color: #333; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
+        .report-field input, .report-field textarea { width: 100%; border: 1px solid #ddd; font-size: 14px; font-family: 'Times New Roman', serif; color: #000; background: #fff; padding: 8px; border-radius: 2px; }
+        
+        .report-log { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace; }
+        .report-log div { border-bottom: 1px dashed #ccc; padding: 4px 0; }
+
+        #photoPreview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        #photoPreview img { width: 100px; height: 100px; object-fit: cover; border: 2px solid #002f6c; border-radius: 4px; }
+
+        .signature-line { margin-top: 60px; text-align: center; }
+        .signature-line div { border-top: 1px solid black; width: 300px; margin: 0 auto; padding-top: 5px; font-size: 12px; font-weight: bold; }
+
+        .no-print { text-align: center; margin-top: 20px; }
+        .no-print button { padding: 12px 24px; margin: 0 5px; border: none; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 14px; }
+        .btn-print { background: #002f6c; color: white; }
+        .btn-email { background: #d4af37; color: black; }
+        .btn-back { background: #444; color: white; }
 
         @media print {
             body * { visibility: hidden; }
             #reportArea, #reportArea * { visibility: visible; }
-            #reportArea { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            #reportArea { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; margin: 0; padding: 20px; }
             .no-print { display: none !important; }
+            #repPhotos { display: none !important; } 
+            .report-section { page-break-inside: avoid; }
+            .tac-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .report-section-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
 </head>
@@ -198,6 +220,7 @@
                 <button class="grid-btn" onclick="placeMarker('CP')"><span>🟨</span>CP</button>
                 <button class="grid-btn" onclick="placeMarker('VSP')"><span>🔵</span>VSP</button>
                 <button class="grid-btn" onclick="placeMarker('FED')"><span>🟡</span>FED</button>
+                <button class="grid-btn" onclick="placeMarker('DRN')"><span>⚪</span>DRN</button> <!-- ADDED DRONE -->
             </div>
         </div>
     </div>
@@ -220,28 +243,50 @@
         <div id="reportArea">
             <div class="tac-header">
                 <h1>TACNET</h1>
-                <h2>Federal - State - Local Multi-Agency Task Force Search App</h2>
-                <p style="font-size: 10px; margin: 5px 0 0 0;">Official Incident Report</p>
+                <h2>Federal - State - Local Law Enforcement Official Report</h2>
+                <p>Multi-Agency Task Force Search App</p>
             </div>
             
-            <div class="report-field"><label>Date / Time</label><input type="text" id="repDate"></div>
-            <div class="report-field"><label>Location / Target</label><input type="text" id="repLoc"></div>
-            <div class="report-field"><label>Incident Type</label><input type="text" id="repInc"></div>
-            <div class="report-field"><label>Disposition</label><input type="text" id="repDisp"></div>
-            <div class="report-field"><label>Notes</label><textarea id="repNotes" rows="4"></textarea></div>
-            
-            <div class="report-field">
-                <label>Itemized Search Log (For Court)</label>
-                <div class="report-log" id="repLog"></div>
+            <div class="report-section">
+                <div class="report-section-title">Incident Details</div>
+                <div class="report-section-body">
+                    <div class="report-field"><label>Date / Time</label><input type="text" id="repDate"></div>
+                    <div class="report-field"><label>Location / Target</label><input type="text" id="repLoc"></div>
+                    <div class="report-field"><label>Incident Type</label><input type="text" id="repInc"></div>
+                    <div class="report-field"><label>Disposition</label><input type="text" id="repDisp"></div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Narrative & Notes</div>
+                <div class="report-section-body">
+                    <div class="report-field"><textarea id="repNotes" rows="4" placeholder="Enter detailed narrative of events..."></textarea></div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Itemized Search Log (For Court)</div>
+                <div class="report-section-body">
+                    <div class="report-log" id="repLog"></div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Evidence / Scene Photos</div>
+                <div class="report-section-body">
+                    <input type="file" id="repPhotos" accept="image/*" multiple onchange="previewPhotos()">
+                    <div id="photoPreview"></div>
+                </div>
             </div>
 
             <div class="signature-line">
                 <div>Commander Signature</div>
             </div>
 
-            <div class="no-print" style="text-align: center; margin-top: 20px;">
-                <button onclick="window.print()" style="padding: 10px 20px; background: #002f6c; color: white; border: none; font-weight: bold; cursor: pointer;">🖨️ PRINT / SAVE PDF</button>
-                <button onclick="document.getElementById('reportModal').classList.add('hidden')" style="padding: 10px 20px; background: black; color: white; border: none; font-weight: bold; cursor: pointer;">⬅ BACK</button>
+            <div class="no-print">
+                <button class="btn-print" onclick="window.print()">🖨️ PRINT / SAVE PDF</button>
+                <button class="btn-email" onclick="emailReport()">✉️ EMAIL REPORT</button>
+                <button class="btn-back" onclick="document.getElementById('reportModal').classList.add('hidden')">⬅ BACK</button>
             </div>
         </div>
     </div>
@@ -276,7 +321,7 @@
         let stillnessTimer = null;
         const NO_MOVEMENT_LIMIT = 45000; // 45 seconds
 
-        const unitColors = { 'LE': 'blue', 'K9': 'lightblue', 'SAR': 'red', 'CIV': 'green', 'SUS': 'purple', 'VEH': 'black', 'CP': 'yellow', 'VSP': 'navy', 'FED': 'gold', 'ART': 'orange' };
+        const unitColors = { 'LE': 'blue', 'K9': 'lightblue', 'SAR': 'red', 'CIV': 'green', 'SUS': 'purple', 'VEH': 'black', 'CP': 'yellow', 'VSP': 'navy', 'FED': 'gold', 'ART': 'orange', 'DRN': 'gray' };
 
         document.addEventListener('DOMContentLoaded', function() {
             const enterBtn = document.getElementById('enterBtn');
@@ -376,7 +421,7 @@
             }
 
             function startDraw(e) {
-                if (lockActive || isTerminated) return; // Prevent drawing if locked
+                if (lockActive || isTerminated) return; 
                 if (!penColor) return;
                 e.preventDefault();
                 isDrawing = true;
@@ -399,17 +444,14 @@
                 }
             }
 
-            // Mouse Events (Desktop)
             mapContainer.addEventListener('mousedown', startDraw);
             mapContainer.addEventListener('mousemove', moveDraw);
             window.addEventListener('mouseup', endDraw);
 
-            // Touch Events (iPad/iPhone/Android)
             mapContainer.addEventListener('touchstart', startDraw, {passive: false});
             mapContainer.addEventListener('touchmove', moveDraw, {passive: false});
             window.addEventListener('touchend', endDraw);
 
-            // Map Click for markers and measuring
             map.on('click', e => {
                 if(isTerminated || lockActive) return;
                 if(measureActive) { handleMeasureClick(e.latlng); return; }
@@ -422,7 +464,6 @@
                 }
             });
 
-            // Map Mouse Move for Measuring Tool
             map.on('mousemove', e => { 
                 if(measureActive && measurePoints.length === 1) {
                     if(tempMeasureLine) map.removeLayer(tempMeasureLine);
@@ -472,7 +513,7 @@
         
         function togglePen(color) {
             if(isTerminated) return;
-            if(lockActive) toggleLock(); // Turn off lock if turning on pen
+            if(lockActive) toggleLock(); 
             
             if(penColor === color) { 
                 penColor = null; 
@@ -487,7 +528,6 @@
             document.getElementById('btn-grnpen').classList.toggle('active', penColor === 'green');
         }
 
-        // FIX: Upgraded Lock to disable all map movements
         function toggleLock() { 
             if(isTerminated) return;
             lockActive = !lockActive; 
@@ -513,7 +553,7 @@
 
         function toggleMeasure() {
             if(isTerminated) return;
-            if(lockActive) toggleLock(); // Turn off lock if turning on measure
+            if(lockActive) toggleLock(); 
             
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
@@ -729,6 +769,22 @@
             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
+        // --- REPORT FUNCTIONS ---
+        function previewPhotos() {
+            const files = document.getElementById('repPhotos').files;
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = '';
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
         function showReport() {
             document.getElementById('repDate').value = new Date().toLocaleString();
             document.getElementById('repLoc').value = document.getElementById('addrInput').value;
@@ -737,6 +793,25 @@
             document.getElementById('repNotes').value = "[Enter Notes]";
             document.getElementById('repLog').innerHTML = searchLog.map(entry => `<div><b>[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             document.getElementById('reportModal').classList.remove('hidden'); 
+        }
+
+        function emailReport() {
+            let date = document.getElementById('repDate').value;
+            let loc = document.getElementById('repLoc').value;
+            let inc = document.getElementById('repInc').value;
+            let disp = document.getElementById('repDisp').value;
+            let notes = document.getElementById('repNotes').value;
+            let logText = searchLog.map(entry => `[${entry.time}] ${entry.action}: ${entry.detail}`).join('\n');
+
+            let subject = `TACNET Official Incident Report - ${inc} - ${date}`;
+            let body = `TACNET OFFICIAL INCIDENT REPORT\n=========================================\n\n`;
+            body += `FEDERAL - STATE - LOCAL MULTI-AGENCY TASK FORCE SEARCH APP\n\n`;
+            body += `DATE/TIME: ${date}\nLOCATION: ${loc}\nINCIDENT TYPE: ${inc}\nDISPOSITION: ${disp}\n\n`;
+            body += `NOTES:\n${notes}\n\n`;
+            body += `ITEMIZED SEARCH LOG:\n${logText}\n\n`;
+            body += `(Note: To include photos and signature, please use the PRINT / SAVE PDF option and attach the PDF to your email.)`;
+
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         function terminateSearch() {
@@ -774,4 +849,4 @@
 </html>
 ```
 
-Commit this to GitHub and load it on your iPad (using `?v=8` at the end of the URL to force refresh). The screen will stay perfectly sized, the bottom bar will stay visible, and the map lock will freeze the screen entirely!
+Commit this to GitHub and load it on your iPad (using `?v=9` at the end of the URL to force refresh). The report will now look like a highly professional, court-ready document, and you will see the Drone marker in the selection grid!
