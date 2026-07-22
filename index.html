@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +49,6 @@
         .admin-btn { background: gold !important; color: black !important; }
 
         /* --- SEARCH PAGE --- */
-        /* FIX: Added 100vh fallback and min-height: 0 for Safari */
         #appContainer { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
         .top-bar { flex-shrink: 0; background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 8px; display: flex; gap: 6px; align-items: center; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px; border-radius: 4px; font-size: 13px; min-width: 0; }
@@ -61,7 +61,6 @@
         .perimeter-slider input[type="range"] { flex-grow: 1; }
         .perimeter-slider span { font-size: 12px; font-weight: bold; }
 
-        /* FIX: Added min-height: 0 and flex-shrink: 1 so Safari doesn't push it off screen */
         .map-wrapper { flex-grow: 1; flex-shrink: 1; min-height: 0; position: relative; overflow: hidden; }
         #map { width: 100%; height: 100%; background: #111; transition: filter 0.3s; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
@@ -73,7 +72,7 @@
         .bottom-bar { flex-shrink: 0; background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding: 10px 5px; overflow-x: auto; gap: 10px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .bottom-bar::-webkit-scrollbar { height: 4px; }
         .bottom-bar::-webkit-scrollbar-thumb { background: var(--tac-green); border-radius: 2px; }
-        .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px 12px; font-weight: bold; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; scroll-snap-align: start; }
+        .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px 12px; font-weight: bold; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; scroll-snap-align: start; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
         .btn-tac.active { background: var(--tac-green); color: black; }
         .btn-officer-down { background: red !important; color: white !important; border-color: white !important; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
@@ -268,6 +267,8 @@
         let radarMarker = null;
         let searchLog = [];
         let isTerminated = false;
+        let isDrawing = false;
+        let activeLine = null;
         
         // Auto-Down Variables
         let lastMoveTime = Date.now();
@@ -357,16 +358,56 @@
             window.addEventListener('offline', () => document.getElementById('offlineInd').style.display = 'block');
             window.addEventListener('online', () => document.getElementById('offlineInd').style.display = 'none');
 
-            let isDrawing = false; let activeLine = null;
-            map.on('mousedown', e => { if(penColor && !isTerminated) { isDrawing = true; activeLine = L.polyline([e.latlng], {color: penColor, weight: 4}).addTo(map); drawingLayers.push(activeLine); logAction('DRAW', penColor + ' pen line started'); } });
-            map.on('mousemove', e => { 
-                if(isDrawing && activeLine) activeLine.addLatLng(e.latlng); 
-                if(measureActive && measurePoints.length === 1) {
-                    if(tempMeasureLine) map.removeLayer(tempMeasureLine);
-                    tempMeasureLine = L.polyline([measurePoints[0], e.latlng], {color: '#00ff41', weight: 2, dashArray: '5,5'}).addTo(map);
+            const mapContainer = map.getContainer();
+
+            function getLatLngFromEvent(e) {
+                let clientX = e.clientX;
+                let clientY = e.clientY;
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else if (e.changedTouches && e.changedTouches.length > 0) {
+                    clientX = e.changedTouches[0].clientX;
+                    clientY = e.changedTouches[0].clientY;
                 }
-            });
-            map.on('mouseup', () => isDrawing = false);
+                let rect = mapContainer.getBoundingClientRect();
+                return map.containerPointToLatLng([clientX - rect.left, clientY - rect.top]);
+            }
+
+            function startDraw(e) {
+                if (!penColor || isTerminated) return;
+                e.preventDefault();
+                isDrawing = true;
+                let latlng = getLatLngFromEvent(e);
+                activeLine = L.polyline([latlng], {color: penColor, weight: 4}).addTo(map);
+                drawingLayers.push(activeLine);
+            }
+
+            function moveDraw(e) {
+                if (!isDrawing || !penColor) return;
+                e.preventDefault();
+                let latlng = getLatLngFromEvent(e);
+                activeLine.addLatLng(latlng);
+            }
+
+            function endDraw() {
+                if (isDrawing) {
+                    isDrawing = false;
+                    logAction('DRAW', penColor + ' pen line drawn');
+                }
+            }
+
+            // Mouse Events (Desktop)
+            mapContainer.addEventListener('mousedown', startDraw);
+            mapContainer.addEventListener('mousemove', moveDraw);
+            window.addEventListener('mouseup', endDraw);
+
+            // Touch Events (iPad/iPhone/Android)
+            mapContainer.addEventListener('touchstart', startDraw, {passive: false});
+            mapContainer.addEventListener('touchmove', moveDraw, {passive: false});
+            window.addEventListener('touchend', endDraw);
+
+            // Map Click for markers and measuring
             map.on('click', e => {
                 if(isTerminated) return;
                 if(measureActive) { handleMeasureClick(e.latlng); return; }
@@ -378,6 +419,15 @@
                     activeType = null;
                 }
             });
+
+            // Map Mouse Move for Measuring Tool
+            map.on('mousemove', e => { 
+                if(measureActive && measurePoints.length === 1) {
+                    if(tempMeasureLine) map.removeLayer(tempMeasureLine);
+                    tempMeasureLine = L.polyline([measurePoints[0], e.latlng], {color: '#00ff41', weight: 2, dashArray: '5,5'}).addTo(map);
+                }
+            });
+
             drawPerimeter(2500);
         }
 
@@ -417,27 +467,44 @@
         }
 
         function toggleNVG() { document.getElementById('map').classList.toggle('nvg-active'); document.getElementById('t-nvg').classList.toggle('active'); }
+        
         function togglePen(color) {
             if(isTerminated) return;
-            if(penColor === color) { penColor = null; map.dragging.enable(); }
-            else { penColor = color; map.dragging.disable(); showToast(color.toUpperCase() + " PEN ACTIVE"); }
+            if(penColor === color) { 
+                penColor = null; 
+                if(!lockActive) map.dragging.enable(); 
+                showToast(color.toUpperCase() + " PEN DEACTIVATED");
+            } else { 
+                penColor = color; 
+                map.dragging.disable(); 
+                showToast(color.toUpperCase() + " PEN ACTIVE"); 
+            }
             document.getElementById('btn-redpen').classList.toggle('active', penColor === 'red');
             document.getElementById('btn-grnpen').classList.toggle('active', penColor === 'green');
         }
+
         function toggleLock() { 
             if(isTerminated) return;
             lockActive = !lockActive; 
             document.getElementById('btn-lock').classList.toggle('active', lockActive); 
-            if(lockActive) { map.dragging.disable(); showToast("MAP LOCKED"); } else { map.dragging.enable(); showToast("MAP UNLOCKED"); } 
+            if(lockActive) { 
+                map.dragging.disable(); 
+                showToast("MAP LOCKED"); 
+            } else { 
+                if(!penColor) map.dragging.enable(); 
+                showToast("MAP UNLOCKED"); 
+            } 
         }
+
         function toggleMeasure() {
             if(isTerminated) return;
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
             measurePoints = [];
             if(tempMeasureLine) { map.removeLayer(tempMeasureLine); tempMeasureLine = null; }
-            if(measureActive) { map.dragging.disable(); showToast("MEASURE TOOL: TAP 2 POINTS"); } else { map.dragging.enable(); }
+            if(measureActive) { map.dragging.disable(); showToast("MEASURE TOOL: TAP 2 POINTS"); } else { if(!penColor && !lockActive) map.dragging.enable(); }
         }
+
         function handleMeasureClick(latlng) {
             measurePoints.push(latlng);
             if(measurePoints.length === 2) {
@@ -454,6 +521,7 @@
                 showToast("DISTANCE: " + distFt + " FT");
             }
         }
+
         function eraseLine() { if(isTerminated) return; if(drawingLayers.length) map.removeLayer(drawingLayers.pop()); }
         function clearMap() { 
             if(isTerminated) return;
@@ -519,7 +587,6 @@
             setTimeout(() => { document.getElementById('downAlert').style.display = 'none'; }, 6000);
         }
 
-        // --- AUTO-OFFICER DOWN LOGIC ---
         function enableAutoDown() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-auto');
@@ -618,7 +685,6 @@
             logAction('TRACE', 'Fugitive Ping Detected at ' + lat.toFixed(5) + ', ' + lng.toFixed(5));
         }
 
-        // --- REPLAY & REPORTS ---
         function showReplay() {
             let logHtml = searchLog.map(entry => `<div><b style="color:gold;">[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             if(logHtml === '') logHtml = '<div>No actions recorded yet.</div>';
@@ -691,4 +757,4 @@
 </html>
 ```
 
-Commit this to GitHub, and open it on your iPad again (using `?v=6` at the end of the URL to force it to refresh). You will now see the bottom toolbar perfectly locked at the bottom!
+Commit this to GitHub and load it on your iPad (using `?v=7` at the end of the URL to force refresh). The pens will now draw smoothly with your finger, and the lock will lock the map perfectly!
