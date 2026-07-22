@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +14,7 @@
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { margin:0; padding:0; height: 100%; width: 100%; background:var(--tac-bg); color:var(--tac-green); font-family: -apple-system, BlinkMacSystemFont, monospace; overflow: hidden; overscroll-behavior: none; }
+        html, body { margin:0; padding:0; width: 100%; height: 100%; position: fixed; top: 0; left: 0; overflow: hidden; background:var(--tac-bg); color:var(--tac-green); font-family: -apple-system, BlinkMacSystemFont, monospace; overscroll-behavior: none; }
         .hidden { display: none !important; }
 
         /* --- LANDING PAGE --- */
@@ -42,19 +41,20 @@
         }
 
         /* --- LOGIN PAGE --- */
-        #loginPage { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 20px; padding-top: var(--safe-top); }
+        #loginPage { position: fixed; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; padding-top: var(--safe-top); }
         #loginPage h2 { color: gold; margin-bottom: 20px; text-align: center; }
         #loginPage select, #loginPage input { width: 90%; max-width: 350px; padding: 15px; margin: 8px 0; border-radius: 6px; border: 1px solid var(--tac-green); background: #111; color: var(--tac-green); font-size: 16px; }
         #loginPage button { width: 90%; max-width: 350px; padding: 15px; background: var(--tac-green); color: black; border: none; font-weight: bold; font-size: 18px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
         .admin-btn { background: gold !important; color: black !important; }
 
         /* --- SEARCH PAGE --- */
-        #appContainer { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
+        /* FIX: Strict Fixed Layout to prevent iPad Safari expanding the map over the bottom bar */
+        #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
         .top-bar { flex-shrink: 0; background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 8px; display: flex; gap: 6px; align-items: center; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px; border-radius: 4px; font-size: 13px; min-width: 0; }
         .btn-go { background: var(--tac-green); color: black; border: none; padding: 8px 12px; font-weight: bold; border-radius: 4px; cursor: pointer; flex-shrink: 0; }
         .top-toggles { display: flex; gap: 4px; flex-shrink: 0; }
-        .btn-toggle { background: #111; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        .btn-toggle { background: #111; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; touch-action: manipulation; }
         .btn-toggle.active { background: var(--tac-green); color: black; }
 
         .perimeter-slider { flex-shrink: 0; background: #000; padding: 5px 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; }
@@ -62,14 +62,15 @@
         .perimeter-slider span { font-size: 12px; font-weight: bold; }
 
         .map-wrapper { flex-grow: 1; flex-shrink: 1; min-height: 0; position: relative; overflow: hidden; }
-        #map { width: 100%; height: 100%; background: #111; transition: filter 0.3s; }
+        /* FIX: Absolute positioning for map so it fits perfectly inside the wrapper */
+        #map { position: absolute; top:0; left:0; right:0; bottom:0; width: 100%; height: 100%; background: #111; transition: filter 0.3s; touch-action: none; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
         #map.locked-overlay::after { content: "SEARCH TERMINATED - EVIDENCE LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: white; padding: 20px; font-weight: bold; font-size: 20px; z-index: 9999; text-align: center; border: 2px solid white; }
 
         #toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 26, 0, 0.95); border: 1px solid var(--tac-green); color: var(--tac-green); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 5000; display: none; pointer-events: none; }
         #offlineInd { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; z-index: 500; display: none; }
 
-        .bottom-bar { flex-shrink: 0; background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding: 10px 5px; overflow-x: auto; gap: 10px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .bottom-bar { flex-shrink: 0; background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding: 10px 5px; overflow-x: auto; gap: 10px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1000; }
         .bottom-bar::-webkit-scrollbar { height: 4px; }
         .bottom-bar::-webkit-scrollbar-thumb { background: var(--tac-green); border-radius: 2px; }
         .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 8px 12px; font-weight: bold; font-size: 11px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; scroll-snap-align: start; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
@@ -375,7 +376,8 @@
             }
 
             function startDraw(e) {
-                if (!penColor || isTerminated) return;
+                if (lockActive || isTerminated) return; // Prevent drawing if locked
+                if (!penColor) return;
                 e.preventDefault();
                 isDrawing = true;
                 let latlng = getLatLngFromEvent(e);
@@ -409,7 +411,7 @@
 
             // Map Click for markers and measuring
             map.on('click', e => {
-                if(isTerminated) return;
+                if(isTerminated || lockActive) return;
                 if(measureActive) { handleMeasureClick(e.latlng); return; }
                 if(activeType) {
                     let m = L.circleMarker(e.latlng, { radius: 12, fillColor: unitColors[activeType], color: 'white', fillOpacity: 1, weight: 2 }).addTo(map);
@@ -470,6 +472,8 @@
         
         function togglePen(color) {
             if(isTerminated) return;
+            if(lockActive) toggleLock(); // Turn off lock if turning on pen
+            
             if(penColor === color) { 
                 penColor = null; 
                 if(!lockActive) map.dragging.enable(); 
@@ -483,26 +487,39 @@
             document.getElementById('btn-grnpen').classList.toggle('active', penColor === 'green');
         }
 
+        // FIX: Upgraded Lock to disable all map movements
         function toggleLock() { 
             if(isTerminated) return;
             lockActive = !lockActive; 
             document.getElementById('btn-lock').classList.toggle('active', lockActive); 
             if(lockActive) { 
                 map.dragging.disable(); 
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+                map.boxZoom.disable();
+                map.keyboard.disable();
                 showToast("MAP LOCKED"); 
             } else { 
-                if(!penColor) map.dragging.enable(); 
+                map.dragging.enable(); 
+                map.touchZoom.enable();
+                map.doubleClickZoom.enable();
+                map.scrollWheelZoom.enable();
+                map.boxZoom.enable();
+                map.keyboard.enable();
                 showToast("MAP UNLOCKED"); 
             } 
         }
 
         function toggleMeasure() {
             if(isTerminated) return;
+            if(lockActive) toggleLock(); // Turn off lock if turning on measure
+            
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
             measurePoints = [];
             if(tempMeasureLine) { map.removeLayer(tempMeasureLine); tempMeasureLine = null; }
-            if(measureActive) { map.dragging.disable(); showToast("MEASURE TOOL: TAP 2 POINTS"); } else { if(!penColor && !lockActive) map.dragging.enable(); }
+            if(measureActive) { map.dragging.disable(); showToast("MEASURE TOOL: TAP 2 POINTS"); } else { if(!penColor) map.dragging.enable(); }
         }
 
         function handleMeasureClick(latlng) {
@@ -757,4 +774,4 @@
 </html>
 ```
 
-Commit this to GitHub and load it on your iPad (using `?v=7` at the end of the URL to force refresh). The pens will now draw smoothly with your finger, and the lock will lock the map perfectly!
+Commit this to GitHub and load it on your iPad (using `?v=8` at the end of the URL to force refresh). The screen will stay perfectly sized, the bottom bar will stay visible, and the map lock will freeze the screen entirely!
