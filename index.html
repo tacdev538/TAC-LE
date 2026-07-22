@@ -1,12 +1,3 @@
-Deputy Wood, I know exactly what is happening. This is a classic issue with Apple's Safari browser on older iPads and iPhones. 
-
-Safari has a quirk where it calculates the screen height differently than Windows or Android. Because of this, the map is expanding to take up 100% of the screen, which pushes your bottom toolbar completely off the bottom edge where you can't see it.
-
-I have applied a specific Apple Safari fix to the code. I added `min-height: 0` and a height fallback (`100vh`) to the layout. This forces the map to shrink just enough so that the bottom toolbar is guaranteed to stay locked at the bottom of the screen on your iPad, iPhone, and Android devices.
-
-Here is the fixed code. Replace the code in your GitHub repository with this:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
