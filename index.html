@@ -21,7 +21,7 @@
         /* --- LANDING PAGE --- */
         #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
         .qr-code { position: absolute; top: calc(15px + var(--safe-top)); left: 15px; width: 70px; height: 70px; background: white; padding: 3px; border-radius: 4px; }
-        
+
         .enter-text { 
             position: absolute; 
             top: calc(95px + var(--safe-top)); 
@@ -50,7 +50,7 @@
 
         /* --- SEARCH PAGE --- */
         #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: grid; grid-template-rows: 44px 30px 1fr 58px; overflow: hidden; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
-        
+
         .top-bar { background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 0 8px; display: flex; gap: 5px; align-items: center; overflow: hidden; white-space: nowrap; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px; border-radius: 4px; font-size: 12px; min-width: 0; height: 30px; }
         .btn-go { background: var(--tac-green); color: black; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; flex-shrink: 0; height: 30px; font-size: 12px; }
@@ -84,9 +84,9 @@
         .grid-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .grid-btn { background: black; border: 1px solid var(--tac-green); color: var(--tac-green); padding: 15px 0; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .grid-btn span { font-size: 20px; }
-        
+
         .leaflet-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--tac-green) !important; font-weight: 900; text-shadow: 1px 1px 2px black; font-size: 11px; }
-        
+
         /* --- OFFICER DOWN ALERT --- */
         #downAlert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.9); z-index: 9000; display: none; align-items: center; justify-content: center; text-align: center; animation: flash 0.5s infinite; }
         .down-alert-content { background: black; border: 4px solid white; padding: 40px; border-radius: 10px; max-width: 90%; }
@@ -110,15 +110,15 @@
         .tac-header h1 { color: #ffffff; margin: 0; font-size: 42px; letter-spacing: 6px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         .tac-header h2 { color: #d4af37; margin: 10px 0 5px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; }
         .tac-header p { color: #b0c4de; margin: 0; font-size: 12px; font-weight: bold; }
-        
+
         .report-section { border: 1px solid #ccc; border-radius: 4px; margin-bottom: 20px; background: white; }
         .report-section-title { background: #002f6c; color: white; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-bottom: 3px solid #d4af37; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         .report-section-body { padding: 15px; }
-        
+
         .report-field { margin-bottom: 12px; }
         .report-field label { font-weight: bold; display: block; color: #333; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
         .report-field input, .report-field textarea { width: 100%; border: 1px solid #ddd; font-size: 14px; font-family: 'Times New Roman', serif; color: #000; background: #fff; padding: 8px; border-radius: 2px; }
-        
+
         .report-log { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace; }
         .report-log div { border-bottom: 1px dashed #ccc; padding: 4px 0; }
 
@@ -258,7 +258,7 @@
                 <h2>Federal State Local Law Enforcement Final Report</h2>
                 <p>Multi-Agency Task Force Search App</p>
             </div>
-            
+
             <div class="report-section">
                 <div class="report-section-title">Incident Details</div>
                 <div class="report-section-body">
@@ -302,7 +302,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Full Screen Photo Viewer -->
     <div id="photoViewer" onclick="this.classList.add('hidden')">
         <img id="photoViewerImg" src="">
@@ -319,7 +319,7 @@
     </div>
 
     <input type="file" id="hiddenCamera" accept="image/*" capture="environment" style="display:none">
-    
+
     <!-- OFFICER DOWN ALERT UI -->
     <div id="downAlert">
         <div class="down-alert-content">
@@ -344,7 +344,7 @@
         let activeLine = null;
         let currentUserName = 'UNKNOWN OFFICER';
         let currentUserDept = 'N/A';
-        
+
         // Auto-Down Variables
         let lastMoveTime = Date.now();
         let stillnessTimer = null;
@@ -395,7 +395,7 @@
             let adminBtn = document.getElementById('adminTokenBtn');
             if(role === 'admin' || role === 'commander') { codeInput.classList.remove('hidden'); } 
             else { codeInput.classList.add('hidden'); }
-            
+
             if(role === 'admin') { adminBtn.classList.remove('hidden'); } 
             else { adminBtn.classList.add('hidden'); }
         }
@@ -403,14 +403,14 @@
         function attemptLogin() {
             let role = document.getElementById('roleSelect').value;
             let code = document.getElementById('accessCode').value;
-            
+
             if(role === 'admin' && code !== '1041') { alert("INVALID ADMIN CODE"); return; }
             if(role === 'commander' && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
-            
+
             // Capture name and dept for Officer Down
             currentUserName = document.getElementById('loginName').value || 'UNKNOWN OFFICER';
             currentUserDept = document.getElementById('loginDept').value || 'N/A';
-            
+
             startApp();
         }
 
@@ -429,7 +429,7 @@
             map = L.map('map', { zoomControl: false, attributionControl: false, maxZoom: 22, maxNativeZoom: 18, tap: true }).setView(perimeterCenter, 13);
             L.control.zoom({ position: 'topright' }).addTo(map);
             currentLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 22, maxNativeZoom: 18 }).addTo(map);
-            
+
             window.addEventListener('offline', () => document.getElementById('offlineInd').style.display = 'block');
             window.addEventListener('online', () => document.getElementById('offlineInd').style.display = 'none');
 
@@ -528,7 +528,7 @@
         }
 
         function adjustPerimeter(val) { document.getElementById('radiusVal').innerText = val + " FT"; drawPerimeter(parseFloat(val)); }
-        
+
         // FIX: Treetop zoom pushed to 20 to stretch imagery closer
         function treetopZoom() { map.setView(map.getCenter(), 20); showToast("TREETOP VIEW"); }
 
@@ -541,11 +541,11 @@
         }
 
         function toggleNVG() { document.getElementById('map').classList.toggle('nvg-active'); document.getElementById('t-nvg').classList.toggle('active'); }
-        
+
         function togglePen(color) {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-            
+
             if(penColor === color) { 
                 penColor = null; 
                 if(!lockActive) map.dragging.enable(); 
@@ -585,7 +585,7 @@
         function toggleMeasure() {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-            
+
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
             measurePoints = [];
@@ -634,11 +634,11 @@
                 return; 
             }
             if(!navigator.geolocation) { showToast("GPS NOT SUPPORTED ON THIS DEVICE"); return; }
-            
+
             btn.classList.add('active');
             showToast("REQUESTING GPS... TAP ALLOW");
             logAction('GPS', 'Live GPS Tracking Activated');
-            
+
             // FIX: maximumAge and timeout adjusted to prevent dropping signal under trees
             watchId = navigator.geolocation.watchPosition(
                 pos => {
@@ -670,11 +670,11 @@
         // --- OFFICER DOWN LOGIC ---
         function triggerOfficerDown() {
             if(isTerminated) return;
-            
+
             // Populate Alert Info
             document.getElementById('downName').innerText = currentUserName;
             document.getElementById('downDept').innerText = "DEPT: " + currentUserDept;
-            
+
             // Try to get current GPS
             if (userMarker) {
                 let ll = userMarker.getLatLng();
@@ -697,7 +697,7 @@
         function enableAutoDown() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-auto');
-            
+
             if(motionActive) {
                 motionActive = false;
                 if(stillnessTimer) clearInterval(stillnessTimer);
@@ -728,9 +728,9 @@
             showToast("🛡️ AUTO-DOWN ACTIVE. ALERTS ON IMPACT OR 45s STILLNESS.");
             logAction('SYSTEM', 'Auto-Officer Down Monitor Enabled (45s Limit)');
             lastMoveTime = Date.now();
-            
+
             window.addEventListener('devicemotion', handleMotion);
-            
+
             stillnessTimer = setInterval(() => {
                 if (!motionActive) return;
                 let timeSinceMove = Date.now() - lastMoveTime;
@@ -746,14 +746,14 @@
             if (!motionActive) return;
             let acc = e.acceleration;
             if (!acc) return;
-            
+
             if (Math.abs(acc.x) > 15 || Math.abs(acc.y) > 15 || Math.abs(acc.z) > 15) {
                 motionActive = false;
                 if(stillnessTimer) clearInterval(stillnessTimer);
                 triggerOfficerDown();
                 return;
             }
-            
+
             if (Math.abs(acc.x) > 1 || Math.abs(acc.y) > 1 || Math.abs(acc.z) > 1) {
                 lastMoveTime = Date.now();
             }
@@ -802,7 +802,7 @@
         function printReplayLog() {
             let logHtml = searchLog.map(entry => `<div><b>[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             if(logHtml === '') logHtml = '<div>No actions recorded yet.</div>';
-            
+
             let win = window.open('', '_blank');
             win.document.write(`<html><head><title>TACNET Replay Log</title><style>body{font-family:monospace;padding:20px;}h1{color:#002f6c;text-align:center;}</style></head><body><h1>TACNET REPLAY LOG</h1>${logHtml}</body></html>`);
             win.document.close();
@@ -813,7 +813,7 @@
         function emailReplayLog() {
             let logText = searchLog.map(entry => `[${entry.time}] ${entry.action}: ${entry.detail}`).join('\n');
             if(logText === '') logText = 'No actions recorded yet.';
-            
+
             let subject = "TACNET Search Replay Log";
             let body = "TACNET SEARCH REPLAY LOG\n\n" + logText + "\n\nGenerated by TACNET Multi-Agency App.";
             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -903,5 +903,3 @@
 </body>
 </html>
 ```
-
-Commit this to your GitHub. Your GPS will now hold steady through the woods, the Treetop view will get you right down into the canopy, and your evidence photos can be tapped to view full-screen!
