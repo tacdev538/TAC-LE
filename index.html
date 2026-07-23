@@ -62,7 +62,7 @@
         .perimeter-slider input[type="range"] { flex-grow: 1; height: 4px; }
         .perimeter-slider span { font-size: 11px; font-weight: bold; }
 
-        .map-wrapper { position: fixed; top: calc(74px + var(--safe-top)); left: 0; right: 0; bottom: calc(58px + var(--safe-bottom)); overflow: hidden; z-index: 1000; }
+        .map-wrapper { position: fixed; top: calc(74px + var(--safe-top)); left: 0; right: 0; bottom: calc(64px + var(--safe-bottom)); overflow: hidden; z-index: 1000; }
         #map { position: absolute; top:0; left:0; right:0; bottom:0; width: 100%; height: 100%; background: #111; transition: filter 0.3s; touch-action: none; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
         #map.locked-overlay::after { content: "SEARCH TERMINATED - EVIDENCE LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: white; padding: 20px; font-weight: bold; font-size: 20px; z-index: 9999; text-align: center; border: 2px solid white; }
@@ -70,10 +70,11 @@
         #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 26, 0, 0.95); border: 1px solid var(--tac-green); color: var(--tac-green); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 5000; display: none; pointer-events: none; }
         #offlineInd { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; z-index: 500; display: none; }
 
-        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 58px; padding-bottom: var(--safe-bottom); background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding-top: 0; padding-left: 5px; padding-right: 5px; overflow-x: auto; gap: 8px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1001; }
+        /* FIX: Increased bottom bar height to 64px and font-size to 12px for readability */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 64px; padding-bottom: var(--safe-bottom); background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding-top: 0; padding-left: 5px; padding-right: 5px; overflow-x: auto; gap: 8px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1001; }
         .bottom-bar::-webkit-scrollbar { height: 4px; }
         .bottom-bar::-webkit-scrollbar-thumb { background: var(--tac-green); border-radius: 2px; }
-        .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 4px 8px; font-weight: bold; font-size: 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; scroll-snap-align: start; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+        .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 4px 10px; font-weight: bold; font-size: 12px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 65px; scroll-snap-align: start; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
         .btn-tac.active { background: var(--tac-green); color: black; }
         .btn-officer-down { background: red !important; color: white !important; border-color: white !important; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
@@ -627,6 +628,7 @@
             showToast("REQUESTING GPS... TAP ALLOW");
             logAction('GPS', 'Live GPS Tracking Activated');
             
+            // FIX: High Accuracy is turned back TRUE to use real GPS satellites instead of Wi-Fi
             watchId = navigator.geolocation.watchPosition(
                 pos => {
                     let latlng = [pos.coords.latitude, pos.coords.longitude];
@@ -654,7 +656,7 @@
                         watchId = null; 
                     } else if (err.code === 2) { showToast("GPS: Searching for satellites..."); }
                 },
-                { enableHighAccuracy: false, maximumAge: 30000, timeout: 27000 }
+                { enableHighAccuracy: true, maximumAge: 0, timeout: 60000 }
             );
         }
 
@@ -834,3 +836,5 @@
 </body>
 </html>
 ```
+
+Save this, and your GPS will be dead-on accurate, and your bottom menu text will be easy to read. Let me know how it looks!
