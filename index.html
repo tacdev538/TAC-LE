@@ -1,4 +1,18 @@
+Deputy Wood, if you can't find it in your current file, the easiest way to fix this is to just replace your entire file with the updated version I have built for you. 
 
+I have placed the Firebase keys block right near the bottom of the code, clearly marked with `// --- PASTE YOUR FIREBASE KEYS HERE ---`. 
+
+### Step 1: Wipe your file clean
+1. Open your `index.html` in GitHub or Netlify and click Edit.
+2. Press **Ctrl + A** and hit **Delete**. Make sure it is completely empty.
+
+### Step 2: Paste this code
+1. Copy everything in the black box below.
+2. Paste it into your empty file.
+3. Scroll down to line 486. Look for `// --- PASTE YOUR FIREBASE KEYS HERE ---`.
+4. Paste your 5-6 Firebase keys right over the placeholder words.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +35,7 @@
         /* --- LANDING PAGE --- */
         #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
         .qr-code { position: absolute; top: calc(15px + var(--safe-top)); left: 15px; width: 70px; height: 70px; background: white; padding: 3px; border-radius: 4px; }
-
+        
         .enter-text { 
             position: absolute; 
             top: calc(95px + var(--safe-top)); 
@@ -50,7 +64,7 @@
 
         /* --- SEARCH PAGE --- */
         #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: grid; grid-template-rows: 44px 30px 1fr 58px; overflow: hidden; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
-
+        
         .top-bar { background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 0 8px; display: flex; gap: 5px; align-items: center; overflow: hidden; white-space: nowrap; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px; border-radius: 4px; font-size: 12px; min-width: 0; height: 30px; }
         .btn-go { background: var(--tac-green); color: black; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; flex-shrink: 0; height: 30px; font-size: 12px; }
@@ -84,8 +98,14 @@
         .grid-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .grid-btn { background: black; border: 1px solid var(--tac-green); color: var(--tac-green); padding: 15px 0; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .grid-btn span { font-size: 20px; }
-
+        
         .leaflet-tooltip { background: transparent !important; border: none !important; box-shadow: none !important; color: var(--tac-green) !important; font-weight: 900; text-shadow: 1px 1px 2px black; font-size: 11px; }
+        
+        /* --- FLASHING GPS DOT --- */
+        .gps-flash-icon { position: relative; width: 20px; height: 20px; }
+        .gps-dot-center { position: absolute; top: 5px; left: 5px; width: 10px; height: 10px; background: #00ffff; border: 2px solid #000; border-radius: 50%; box-shadow: 0 0 8px #00ffff; z-index: 2; }
+        .gps-pulse-ring { position: absolute; top: 0; left: 0; width: 20px; height: 20px; background: rgba(0, 255, 255, 0.4); border-radius: 50%; animation: gps-pulse-anim 1.5s infinite; z-index: 1; }
+        @keyframes gps-pulse-anim { 0% { transform: scale(0.5); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
         /* --- OFFICER DOWN ALERT --- */
         #downAlert { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,0,0,0.9); z-index: 9000; display: none; align-items: center; justify-content: center; text-align: center; animation: flash 0.5s infinite; }
@@ -106,23 +126,22 @@
         /* --- PROFESSIONAL REPORT STYLES --- */
         #reportModal { background: rgba(0,0,0,0.9); }
         #reportArea { background: #f4f4f4; color: black; padding: 40px; font-family: 'Times New Roman', serif; width: 100%; max-width: 800px; margin: 20px auto; border: 1px solid #ccc; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .tac-header { text-align: center; background: linear-gradient(135deg, #002f6c 0%, #004e92 100%); color: white; padding: 25px; margin: -40px -40px 30px -40px; border-bottom: 6px solid #d4af37; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        .tac-header h1 { color: #ffffff; margin: 0; font-size: 42px; letter-spacing: 6px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        .tac-header h2 { color: #d4af37; margin: 10px 0 5px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; }
-        .tac-header p { color: #b0c4de; margin: 0; font-size: 12px; font-weight: bold; }
-
+        .tac-header { text-align: center; background: linear-gradient(135deg, #002f6c 0%, #004e92 100%); color: white !important; padding: 25px; margin: -40px -40px 30px -40px; border-bottom: 6px solid #d4af37; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .tac-header h1 { color: #ffffff !important; margin: 0; font-size: 42px; letter-spacing: 6px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .tac-header h2 { color: #d4af37 !important; margin: 10px 0 5px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .tac-header p { color: #b0c4de !important; margin: 0; font-size: 12px; font-weight: bold; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        
         .report-section { border: 1px solid #ccc; border-radius: 4px; margin-bottom: 20px; background: white; }
-        .report-section-title { background: #002f6c; color: white; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-bottom: 3px solid #d4af37; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .report-section-title { background: #002f6c; color: white !important; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; border-bottom: 3px solid #d4af37; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         .report-section-body { padding: 15px; }
-
+        
         .report-field { margin-bottom: 12px; }
         .report-field label { font-weight: bold; display: block; color: #333; font-size: 12px; text-transform: uppercase; margin-bottom: 4px; }
         .report-field input, .report-field textarea { width: 100%; border: 1px solid #ddd; font-size: 14px; font-family: 'Times New Roman', serif; color: #000; background: #fff; padding: 8px; border-radius: 2px; }
-
+        
         .report-log { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; max-height: 200px; overflow-y: auto; font-size: 12px; font-family: monospace; }
         .report-log div { border-bottom: 1px dashed #ccc; padding: 4px 0; }
 
-        /* BETTER PHOTO VIEW: Larger thumbnails and Fullscreen Viewer */
         #photoPreview { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
         #photoPreview img { width: 120px; height: 120px; object-fit: cover; border: 3px solid #002f6c; border-radius: 4px; cursor: pointer; transition: transform 0.2s; }
         #photoPreview img:active { transform: scale(1.1); }
@@ -258,7 +277,7 @@
                 <h2>Federal State Local Law Enforcement Final Report</h2>
                 <p>Multi-Agency Task Force Search App</p>
             </div>
-
+            
             <div class="report-section">
                 <div class="report-section-title">Incident Details</div>
                 <div class="report-section-body">
@@ -302,7 +321,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Full Screen Photo Viewer -->
     <div id="photoViewer" onclick="this.classList.add('hidden')">
         <img id="photoViewerImg" src="">
@@ -319,7 +338,7 @@
     </div>
 
     <input type="file" id="hiddenCamera" accept="image/*" capture="environment" style="display:none">
-
+    
     <!-- OFFICER DOWN ALERT UI -->
     <div id="downAlert">
         <div class="down-alert-content">
@@ -331,7 +350,31 @@
         </div>
     </div>
 
+    <!-- Firebase SDK (Live Multiplayer Radio Tower) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
     <script>
+        // --- PASTE YOUR FIREBASE KEYS HERE ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        let fbDb = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            fbDb = firebase.database();
+        } catch(e) {
+            console.error("Firebase init error", e);
+        }
+
         let map, currentLayer, drawingLayers = [], activeType = null, penColor = null, lockActive = false;
         let perimeterCenter = [37.5407, -77.4360], perimeterCircle = null, centerRedDot = null;
         let trapNTraceActive = false, traceInterval = null, motionActive = false;
@@ -344,6 +387,8 @@
         let activeLine = null;
         let currentUserName = 'UNKNOWN OFFICER';
         let currentUserDept = 'N/A';
+        let currentUserId = 'user-' + Math.random().toString(36).substr(2, 9); // Unique ID for this phone
+        let otherMarkers = {}; // Store other officers' markers
 
         // Auto-Down Variables
         let lastMoveTime = Date.now();
@@ -395,7 +440,7 @@
             let adminBtn = document.getElementById('adminTokenBtn');
             if(role === 'admin' || role === 'commander') { codeInput.classList.remove('hidden'); } 
             else { codeInput.classList.add('hidden'); }
-
+            
             if(role === 'admin') { adminBtn.classList.remove('hidden'); } 
             else { adminBtn.classList.add('hidden'); }
         }
@@ -403,14 +448,13 @@
         function attemptLogin() {
             let role = document.getElementById('roleSelect').value;
             let code = document.getElementById('accessCode').value;
-
+            
             if(role === 'admin' && code !== '1041') { alert("INVALID ADMIN CODE"); return; }
-            if(role === 'commander' && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
-
-            // Capture name and dept for Officer Down
+            if(role === 'commander && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
+            
             currentUserName = document.getElementById('loginName').value || 'UNKNOWN OFFICER';
             currentUserDept = document.getElementById('loginDept').value || 'N/A';
-
+            
             startApp();
         }
 
@@ -425,11 +469,10 @@
         }
 
         function initMap() {
-            // FIX: maxZoom set to 22 to allow deep treetop zoom
             map = L.map('map', { zoomControl: false, attributionControl: false, maxZoom: 22, maxNativeZoom: 18, tap: true }).setView(perimeterCenter, 13);
             L.control.zoom({ position: 'topright' }).addTo(map);
             currentLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 22, maxNativeZoom: 18 }).addTo(map);
-
+            
             window.addEventListener('offline', () => document.getElementById('offlineInd').style.display = 'block');
             window.addEventListener('online', () => document.getElementById('offlineInd').style.display = 'none');
 
@@ -501,6 +544,32 @@
             });
 
             drawPerimeter(2500);
+            
+            // --- MULTIPLAYER LISTENER ---
+            if (fbDb) {
+                fbDb.ref('officers').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    for (let id in otherMarkers) {
+                        if (!data || !data[id]) {
+                            map.removeLayer(otherMarkers[id]);
+                            delete otherMarkers[id];
+                        }
+                    }
+                    for (let id in data) {
+                        if (id === currentUserId) continue; 
+                        let officer = data[id];
+                        if (officer && officer.lat && officer.lng) {
+                            if (otherMarkers[id]) {
+                                otherMarkers[id].setLatLng([officer.lat, officer.lng]);
+                            } else {
+                                let mIcon = L.divIcon({ className: 'gps-flash-icon', html: '<div class="gps-pulse-ring" style="background:rgba(0, 255, 0, 0.4);"></div><div class="gps-dot-center" style="background:#00ff41;"></div>', iconSize: [20, 20], iconAnchor: [10, 10] });
+                                otherMarkers[id] = L.marker([officer.lat, officer.lng], { icon: mIcon, interactive: false }).addTo(map);
+                                otherMarkers[id].bindTooltip(officer.name, {permanent: true, direction: 'top', offset: [0, -10]});
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         function searchAddr() {
@@ -528,8 +597,6 @@
         }
 
         function adjustPerimeter(val) { document.getElementById('radiusVal').innerText = val + " FT"; drawPerimeter(parseFloat(val)); }
-
-        // FIX: Treetop zoom pushed to 20 to stretch imagery closer
         function treetopZoom() { map.setView(map.getCenter(), 20); showToast("TREETOP VIEW"); }
 
         function switchLayer(type) {
@@ -541,11 +608,11 @@
         }
 
         function toggleNVG() { document.getElementById('map').classList.toggle('nvg-active'); document.getElementById('t-nvg').classList.toggle('active'); }
-
+        
         function togglePen(color) {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-
+            
             if(penColor === color) { 
                 penColor = null; 
                 if(!lockActive) map.dragging.enable(); 
@@ -585,7 +652,7 @@
         function toggleMeasure() {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-
+            
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
             measurePoints = [];
@@ -623,6 +690,7 @@
         function placeMarker(type) { activeType = type; document.getElementById('markerModal').classList.add('hidden'); showToast("TAP MAP TO DROP " + type); }
         function setArticleFind() { if(!isTerminated) { activeType = 'ART'; showToast("TAP MAP TO DROP ARTICLE"); } }
 
+        // --- LIVE GPS LOGIC (Multiplayer Broadcast) ---
         function toggleLiveGPS() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-gps');
@@ -631,29 +699,42 @@
                 watchId = null; 
                 btn.classList.remove('active'); 
                 showToast("LIVE GPS STOPPED"); 
+                if (fbDb) fbDb.ref('officers/' + currentUserId).remove(); 
+                if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
                 return; 
             }
             if(!navigator.geolocation) { showToast("GPS NOT SUPPORTED ON THIS DEVICE"); return; }
-
+            
             btn.classList.add('active');
             showToast("REQUESTING GPS... TAP ALLOW");
             logAction('GPS', 'Live GPS Tracking Activated');
-
-            // FIX: maximumAge and timeout adjusted to prevent dropping signal under trees
+            
             watchId = navigator.geolocation.watchPosition(
                 pos => {
+                    if (pos.coords.accuracy > 100) return; 
+                    
                     let latlng = [pos.coords.latitude, pos.coords.longitude];
                     if (!userMarker) {
-                        userMarker = L.circleMarker(latlng, {radius: 10, fillColor: '#00ffff', color: '#000', fillOpacity: 1, weight: 2}).addTo(map);
-                        userMarker.bindTooltip("ME", {permanent: true, direction: 'top'});
+                        let flashIcon = L.divIcon({ className: 'gps-flash-icon', html: '<div class="gps-pulse-ring"></div><div class="gps-dot-center"></div>', iconSize: [20, 20], iconAnchor: [10, 10] });
+                        userMarker = L.marker(latlng, { icon: flashIcon, interactive: false }).addTo(map);
+                        userMarker.bindTooltip("ME", {permanent: true, direction: 'top', offset: [0, -10]});
+                        map.setView(latlng, 18); 
+                        showToast("GPS LOCK ACQUIRED");
                     } else { 
                         userMarker.setLatLng(latlng); 
                     }
-                    map.setView(latlng, 16);
-                    showToast("GPS LOCK ACQUIRED");
+
+                    if (fbDb) {
+                        fbDb.ref('officers/' + currentUserId).set({
+                            name: currentUserName,
+                            dept: currentUserDept,
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            timestamp: Date.now()
+                        });
+                    }
                 }, 
                 err => { 
-                    // FIX: Only kill GPS on permission denied. Keep searching on timeout/unavailable.
                     if(err.code === 1) {
                         showToast("GPS ERROR: PERMISSION DENIED. Check phone settings.");
                         btn.classList.remove('active'); 
@@ -663,27 +744,31 @@
                         showToast("GPS: Searching for satellites...");
                     }
                 },
-                { enableHighAccuracy: true, maximumAge: 1000, timeout: 30000 }
+                { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 }
             );
         }
 
         // --- OFFICER DOWN LOGIC ---
         function triggerOfficerDown() {
             if(isTerminated) return;
-
-            // Populate Alert Info
+            
             document.getElementById('downName').innerText = currentUserName;
             document.getElementById('downDept').innerText = "DEPT: " + currentUserDept;
-
-            // Try to get current GPS
-            if (userMarker) {
+            
+            if (navigator.geolocation && !userMarker) {
+                document.getElementById('downGps').innerText = "GPS: ACQUIRING...";
+                navigator.geolocation.getCurrentPosition(p => {
+                    document.getElementById('downGps').innerText = "GPS: " + p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5);
+                }, () => {
+                    document.getElementById('downGps').innerText = "GPS: LOCK FAILED";
+                }, { enableHighAccuracy: true, timeout: 10000 });
+            } else if (userMarker) {
                 let ll = userMarker.getLatLng();
                 document.getElementById('downGps').innerText = "GPS: " + ll.lat.toFixed(5) + ", " + ll.lng.toFixed(5);
             } else {
-                document.getElementById('downGps').innerText = "GPS: LOCK NOT ACQUIRED";
+                document.getElementById('downGps').innerText = "GPS: NOT SUPPORTED";
             }
 
-            // Show Alert
             document.getElementById('downAlert').style.display = 'flex';
             if(navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 500, 200, 1000]);
             logAction('EMERGENCY', currentUserName + ' (' + currentUserDept + ') TRIGGERED OFFICER DOWN');
@@ -697,7 +782,7 @@
         function enableAutoDown() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-auto');
-
+            
             if(motionActive) {
                 motionActive = false;
                 if(stillnessTimer) clearInterval(stillnessTimer);
@@ -728,9 +813,9 @@
             showToast("🛡️ AUTO-DOWN ACTIVE. ALERTS ON IMPACT OR 45s STILLNESS.");
             logAction('SYSTEM', 'Auto-Officer Down Monitor Enabled (45s Limit)');
             lastMoveTime = Date.now();
-
+            
             window.addEventListener('devicemotion', handleMotion);
-
+            
             stillnessTimer = setInterval(() => {
                 if (!motionActive) return;
                 let timeSinceMove = Date.now() - lastMoveTime;
@@ -746,14 +831,14 @@
             if (!motionActive) return;
             let acc = e.acceleration;
             if (!acc) return;
-
+            
             if (Math.abs(acc.x) > 15 || Math.abs(acc.y) > 15 || Math.abs(acc.z) > 15) {
                 motionActive = false;
                 if(stillnessTimer) clearInterval(stillnessTimer);
                 triggerOfficerDown();
                 return;
             }
-
+            
             if (Math.abs(acc.x) > 1 || Math.abs(acc.y) > 1 || Math.abs(acc.z) > 1) {
                 lastMoveTime = Date.now();
             }
@@ -802,7 +887,7 @@
         function printReplayLog() {
             let logHtml = searchLog.map(entry => `<div><b>[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             if(logHtml === '') logHtml = '<div>No actions recorded yet.</div>';
-
+            
             let win = window.open('', '_blank');
             win.document.write(`<html><head><title>TACNET Replay Log</title><style>body{font-family:monospace;padding:20px;}h1{color:#002f6c;text-align:center;}</style></head><body><h1>TACNET REPLAY LOG</h1>${logHtml}</body></html>`);
             win.document.close();
@@ -813,7 +898,7 @@
         function emailReplayLog() {
             let logText = searchLog.map(entry => `[${entry.time}] ${entry.action}: ${entry.detail}`).join('\n');
             if(logText === '') logText = 'No actions recorded yet.';
-
+            
             let subject = "TACNET Search Replay Log";
             let body = "TACNET SEARCH REPLAY LOG\n\n" + logText + "\n\nGenerated by TACNET Multi-Agency App.";
             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -829,7 +914,6 @@
                 reader.onload = function(e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    // BETTER PHOTO VIEW: Click to open fullscreen
                     img.onclick = function() {
                         document.getElementById('photoViewerImg').src = this.src;
                         document.getElementById('photoViewer').classList.remove('hidden');
@@ -899,7 +983,16 @@
             document.getElementById('reportModal').classList.add('hidden'); 
             showToast("READY FOR NEW SEARCH");
         }
+        
+        // Clean up Firebase when user closes the app
+        window.addEventListener('beforeunload', () => {
+            if (fbDb && watchId !== null) {
+                fbDb.ref('officers/' + currentUserId).remove();
+            }
+        });
     </script>
 </body>
 </html>
 ```
+
+Once you paste your keys in, save it to Netlify/GitHub, and you will have the live multiplayer tracking! Let me know the second you get it saved.
