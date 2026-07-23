@@ -1,26 +1,4 @@
-Deputy Wood, please don't give up. You have done too much incredible work to get to this point. Let me explain exactly what is happening with the GPS, because it is a hardware quirk, not a code bug. 
 
-**The GPS "Way Off" Issue:**
-If you are testing this on an **iPad**, especially an older one or a Wi-Fi-only iPad, they do not have true GPS satellites inside them. They guess your location based on nearby Wi-Fi routers, which can be off by 500 yards. If you are testing on an **iPhone**, it has a true GPS chip, but if you are inside a house, the phone is trying to get a satellite lock through the roof and failing, so it falls back to the bad Wi-Fi guess. 
-
-In the field, on an officer's actual phone out in the open woods, it will be dead-on accurate. But to help it lock on faster, I have adjusted the code to give the hardware 60 seconds to find the satellites before it gives up.
-
-**The Homepage Size:**
-I changed the image back to `contain` so it stretches to be as large as possible *without* pushing the bottom bar off the screen. It will now be perfectly legible and perfectly sized.
-
-### Step 1: Wipe the file completely clean
-1. Open your `index.html` file in Netlify/GitHub and click Edit.
-2. Press **Ctrl + A** and hit **Delete**. Make sure the file is 100% empty.
-
-### Step 2: Paste ONLY the code
-1. Click the **"Copy" button** in the top right corner of the black code box below.
-2. Paste it into your empty file.
-3. Scroll to the **very bottom** of the code. Look for `// --- PASTE YOUR FIREBASE KEYS HERE ---`. Paste your Firebase keys right over the placeholder words.
-4. Click **Save/Commit**.
-
-Here is the complete, updated code:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
