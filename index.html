@@ -820,13 +820,19 @@
     <script>
         // --- PASTE YOUR FIREBASE KEYS HERE ---
         const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "your-project.firebaseapp.com",
-  databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-  projectId: "your-project",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abc123"
+            apiKey: "AIzaSy...",
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abc123"
+        };
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            fbDb = firebase.database();
+        } catch(e) { console.error("Firebase init error", e); }
 };
         };
 
