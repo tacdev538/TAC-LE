@@ -466,7 +466,7 @@ const firebaseConfig = {
             let code = document.getElementById('accessCode').value;
             
             if(role === 'admin' && code !== '1041') { alert("INVALID ADMIN CODE"); return; }
-            if(role === 'commander && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
+           if(role === 'commander' && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
             
             currentUserName = document.getElementById('loginName').value || 'UNKNOWN OFFICER';
             currentUserDept = document.getElementById('loginDept').value || 'N/A';
