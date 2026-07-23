@@ -1,4 +1,18 @@
+Deputy Wood, I completely understand. Pasting little pieces of code back and forth is causing formatting errors, which is why the button is dead. If even one comma is out of place, the whole app shuts down.
 
+Here is the **entire, complete code** from start to finish. 
+
+### How to fix this permanently:
+1. Open your `index.html` file in Netlify/GitHub and click Edit.
+2. Press **Ctrl + A** and hit **Delete**. Make sure the file is 100% empty.
+3. Click the **"Copy" button** in the top right corner of the black code box below.
+4. Paste it into your empty file.
+5. Scroll to the **very bottom** of the code. Look for `// --- PASTE YOUR FIREBASE KEYS HERE ---`. Paste your Firebase keys right over the placeholder words. Make sure the commas and quotes are intact!
+6. Click **Save/Commit**.
+
+Here is the complete, unbroken code:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,8 +33,7 @@
         .hidden { display: none !important; }
 
         /* --- LANDING PAGE --- */
-        /* SHRUNK: Image is now 80% to fit perfectly with breathing room */
-        #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: 80% auto; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
+        #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: 50% auto; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
         .qr-code { position: absolute; top: calc(15px + var(--safe-top)); left: 15px; width: 70px; height: 70px; background: white; padding: 3px; border-radius: 4px; }
         
         .enter-text { 
@@ -52,7 +65,6 @@
         /* --- SEARCH PAGE (FIXED LAYOUT) --- */
         #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
         
-        /* Top Bar nailed to the top */
         .top-bar { position: fixed; top: var(--safe-top); left: 0; right: 0; height: 44px; background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 0 8px; display: flex; gap: 5px; align-items: center; overflow: hidden; white-space: nowrap; z-index: 1001; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px; border-radius: 4px; font-size: 12px; min-width: 0; height: 30px; }
         .btn-go { background: var(--tac-green); color: black; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; flex-shrink: 0; height: 30px; font-size: 12px; }
@@ -60,12 +72,10 @@
         .btn-toggle { background: #111; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 5px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; touch-action: manipulation; height: 30px; display: flex; align-items: center; }
         .btn-toggle.active { background: var(--tac-green); color: black; }
 
-        /* Slider nailed right below Top Bar */
         .perimeter-slider { position: fixed; top: calc(44px + var(--safe-top)); left: 0; right: 0; height: 30px; background: #000; padding: 0 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; overflow: hidden; z-index: 1001; }
         .perimeter-slider input[type="range"] { flex-grow: 1; height: 4px; }
         .perimeter-slider span { font-size: 11px; font-weight: bold; }
 
-        /* Map trapped in the middle */
         .map-wrapper { position: fixed; top: calc(74px + var(--safe-top)); left: 0; right: 0; bottom: calc(58px + var(--safe-bottom)); overflow: hidden; z-index: 1000; }
         #map { position: absolute; top:0; left:0; right:0; bottom:0; width: 100%; height: 100%; background: #111; transition: filter 0.3s; touch-action: none; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
@@ -74,7 +84,6 @@
         #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 26, 0, 0.95); border: 1px solid var(--tac-green); color: var(--tac-green); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 5000; display: none; pointer-events: none; }
         #offlineInd { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; z-index: 500; display: none; }
 
-        /* Bottom Bar nailed to the bottom */
         .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 58px; padding-bottom: var(--safe-bottom); background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding-top: 0; padding-left: 5px; padding-right: 5px; overflow-x: auto; gap: 8px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1001; }
         .bottom-bar::-webkit-scrollbar { height: 4px; }
         .bottom-bar::-webkit-scrollbar-thumb { background: var(--tac-green); border-radius: 2px; }
@@ -343,7 +352,7 @@
 
     <!-- MAIN APP SCRIPT -->
     <script>
-        let fbDb = null; // Defined here so it doesn't crash the app if Firebase fails
+        let fbDb = null; 
         let map, currentLayer, drawingLayers = [], activeType = null, penColor = null, lockActive = false;
         let perimeterCenter = [37.5407, -77.4360], perimeterCircle = null, centerRedDot = null;
         let trapNTraceActive = false, traceInterval = null, motionActive = false;
@@ -356,13 +365,12 @@
         let activeLine = null;
         let currentUserName = 'UNKNOWN OFFICER';
         let currentUserDept = 'N/A';
-        let currentUserId = 'user-' + Math.random().toString(36).substr(2, 9); // Unique ID for this phone
-        let otherMarkers = {}; // Store other officers' markers
+        let currentUserId = 'user-' + Math.random().toString(36).substr(2, 9); 
+        let otherMarkers = {}; 
 
-        // Auto-Down Variables
         let lastMoveTime = Date.now();
         let stillnessTimer = null;
-        const NO_MOVEMENT_LIMIT = 45000; // 45 seconds
+        const NO_MOVEMENT_LIMIT = 45000;
 
         const unitColors = { 'LE': 'blue', 'K9': 'lightblue', 'SAR': 'red', 'CIV': 'green', 'SUS': 'purple', 'VEH': 'black', 'CP': 'yellow', 'VSP': 'navy', 'FED': 'gold', 'ART': 'orange', 'DRN': 'gray' };
 
@@ -372,9 +380,7 @@
                 if (trialEnd && Date.now() > parseInt(trialEnd)) {
                     alert("TRIAL EXPIRED. Log in as Admin to generate a new token.");
                 }
-            } catch(e) {
-                console.error("Storage error", e);
-            }
+            } catch(e) { console.error("Storage error", e); }
             document.getElementById('landingPage').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
         }
@@ -398,9 +404,7 @@
                 let endTime = Date.now() + (15 * 24 * 60 * 60 * 1000); 
                 localStorage.setItem('tacnet_trial_end', endTime);
                 alert("TRIAL TOKEN GENERATED: " + token + "\nValid for 15 Days.");
-            } catch(e) {
-                alert("Could not generate token. Browser storage is blocked.");
-            }
+            } catch(e) { alert("Could not generate token. Browser storage is blocked."); }
         }
 
         function toggleAccessCode() {
@@ -409,7 +413,6 @@
             let adminBtn = document.getElementById('adminTokenBtn');
             if(role === 'admin' || role === 'commander') { codeInput.classList.remove('hidden'); } 
             else { codeInput.classList.add('hidden'); }
-            
             if(role === 'admin') { adminBtn.classList.remove('hidden'); } 
             else { adminBtn.classList.add('hidden'); }
         }
@@ -417,13 +420,10 @@
         function attemptLogin() {
             let role = document.getElementById('roleSelect').value;
             let code = document.getElementById('accessCode').value;
-            
             if(role === 'admin' && code !== '1041') { alert("INVALID ADMIN CODE"); return; }
             if(role === 'commander' && code !== '1042') { alert("INVALID COMMANDER CODE"); return; }
-            
             currentUserName = document.getElementById('loginName').value || 'UNKNOWN OFFICER';
             currentUserDept = document.getElementById('loginDept').value || 'N/A';
-            
             startApp();
         }
 
@@ -433,9 +433,7 @@
             setTimeout(initMap, 100); 
         }
 
-        function exitApp() {
-            location.reload();
-        }
+        function exitApp() { location.reload(); }
 
         function initMap() {
             map = L.map('map', { zoomControl: false, attributionControl: false, maxZoom: 22, maxNativeZoom: 18, tap: true }).setView(perimeterCenter, 13);
@@ -448,15 +446,9 @@
             const mapContainer = map.getContainer();
 
             function getLatLngFromEvent(e) {
-                let clientX = e.clientX;
-                let clientY = e.clientY;
-                if (e.touches && e.touches.length > 0) {
-                    clientX = e.touches[0].clientX;
-                    clientY = e.touches[0].clientY;
-                } else if (e.changedTouches && e.changedTouches.length > 0) {
-                    clientX = e.changedTouches[0].clientX;
-                    clientY = e.changedTouches[0].clientY;
-                }
+                let clientX = e.clientX, clientY = e.clientY;
+                if (e.touches && e.touches.length > 0) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; } 
+                else if (e.changedTouches && e.changedTouches.length > 0) { clientX = e.changedTouches[0].clientX; clientY = e.changedTouches[0].clientY; }
                 let rect = mapContainer.getBoundingClientRect();
                 return map.containerPointToLatLng([clientX - rect.left, clientY - rect.top]);
             }
@@ -479,10 +471,7 @@
             }
 
             function endDraw() {
-                if (isDrawing) {
-                    isDrawing = false;
-                    logAction('DRAW', penColor + ' pen line drawn');
-                }
+                if (isDrawing) { isDrawing = false; logAction('DRAW', penColor + ' pen line drawn'); }
             }
 
             mapContainer.addEventListener('mousedown', startDraw);
@@ -514,15 +503,11 @@
 
             drawPerimeter(2500);
             
-            // --- MULTIPLAYER LISTENER ---
             if (fbDb) {
                 fbDb.ref('officers').on('value', (snapshot) => {
                     const data = snapshot.val();
                     for (let id in otherMarkers) {
-                        if (!data || !data[id]) {
-                            map.removeLayer(otherMarkers[id]);
-                            delete otherMarkers[id];
-                        }
+                        if (!data || !data[id]) { map.removeLayer(otherMarkers[id]); delete otherMarkers[id]; }
                     }
                     for (let id in data) {
                         if (id === currentUserId) continue; 
@@ -581,16 +566,8 @@
         function togglePen(color) {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-            
-            if(penColor === color) { 
-                penColor = null; 
-                if(!lockActive) map.dragging.enable(); 
-                showToast(color.toUpperCase() + " PEN DEACTIVATED");
-            } else { 
-                penColor = color; 
-                map.dragging.disable(); 
-                showToast(color.toUpperCase() + " PEN ACTIVE"); 
-            }
+            if(penColor === color) { penColor = null; if(!lockActive) map.dragging.enable(); showToast(color.toUpperCase() + " PEN DEACTIVATED"); } 
+            else { penColor = color; map.dragging.disable(); showToast(color.toUpperCase() + " PEN ACTIVE"); }
             document.getElementById('btn-redpen').classList.toggle('active', penColor === 'red');
             document.getElementById('btn-grnpen').classList.toggle('active', penColor === 'green');
         }
@@ -600,28 +577,15 @@
             lockActive = !lockActive; 
             document.getElementById('btn-lock').classList.toggle('active', lockActive); 
             if(lockActive) { 
-                map.dragging.disable(); 
-                map.touchZoom.disable();
-                map.doubleClickZoom.disable();
-                map.scrollWheelZoom.disable();
-                map.boxZoom.disable();
-                map.keyboard.disable();
-                showToast("MAP LOCKED"); 
+                map.dragging.disable(); map.touchZoom.disable(); map.doubleClickZoom.disable(); map.scrollWheelZoom.disable(); map.boxZoom.disable(); map.keyboard.disable(); showToast("MAP LOCKED"); 
             } else { 
-                map.dragging.enable(); 
-                map.touchZoom.enable();
-                map.doubleClickZoom.enable();
-                map.scrollWheelZoom.enable();
-                map.boxZoom.enable();
-                map.keyboard.enable();
-                showToast("MAP UNLOCKED"); 
+                map.dragging.enable(); map.touchZoom.enable(); map.doubleClickZoom.enable(); map.scrollWheelZoom.enable(); map.boxZoom.enable(); map.keyboard.enable(); showToast("MAP UNLOCKED"); 
             } 
         }
 
         function toggleMeasure() {
             if(isTerminated) return;
             if(lockActive) toggleLock(); 
-            
             measureActive = !measureActive;
             document.getElementById('btn-measure').classList.toggle('active', measureActive);
             measurePoints = [];
@@ -659,7 +623,6 @@
         function placeMarker(type) { activeType = type; document.getElementById('markerModal').classList.add('hidden'); showToast("TAP MAP TO DROP " + type); }
         function setArticleFind() { if(!isTerminated) { activeType = 'ART'; showToast("TAP MAP TO DROP ARTICLE"); } }
 
-        // --- LIVE GPS LOGIC (Multiplayer Broadcast) ---
         function toggleLiveGPS() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-gps');
@@ -680,8 +643,6 @@
             
             watchId = navigator.geolocation.watchPosition(
                 pos => {
-                    if (pos.coords.accuracy > 100) return; 
-                    
                     let latlng = [pos.coords.latitude, pos.coords.longitude];
                     if (!userMarker) {
                         let flashIcon = L.divIcon({ className: 'gps-flash-icon', html: '<div class="gps-pulse-ring"></div><div class="gps-dot-center"></div>', iconSize: [20, 20], iconAnchor: [10, 10] });
@@ -695,32 +656,24 @@
 
                     if (fbDb) {
                         fbDb.ref('officers/' + currentUserId).set({
-                            name: currentUserName,
-                            dept: currentUserDept,
-                            lat: pos.coords.latitude,
-                            lng: pos.coords.longitude,
-                            timestamp: Date.now()
+                            name: currentUserName, dept: currentUserDept, lat: pos.coords.latitude, lng: pos.coords.longitude, timestamp: Date.now()
                         });
                     }
                 }, 
                 err => { 
                     if(err.code === 1) {
-                        showToast("GPS ERROR: PERMISSION DENIED. Check phone settings.");
+                        showToast("GPS BLOCKED: Reset Location & Privacy in iPhone Settings.");
                         btn.classList.remove('active'); 
                         if(watchId) navigator.geolocation.clearWatch(watchId); 
                         watchId = null; 
-                    } else if (err.code === 2) {
-                        showToast("GPS: Searching for satellites...");
-                    }
+                    } else if (err.code === 2) { showToast("GPS: Searching for satellites..."); }
                 },
-                { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 }
+                { enableHighAccuracy: false, maximumAge: 30000, timeout: 27000 }
             );
         }
 
-        // --- OFFICER DOWN LOGIC ---
         function triggerOfficerDown() {
             if(isTerminated) return;
-            
             document.getElementById('downName').innerText = currentUserName;
             document.getElementById('downDept').innerText = "DEPT: " + currentUserDept;
             
@@ -728,165 +681,105 @@
                 document.getElementById('downGps').innerText = "GPS: ACQUIRING...";
                 navigator.geolocation.getCurrentPosition(p => {
                     document.getElementById('downGps').innerText = "GPS: " + p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5);
-                }, () => {
-                    document.getElementById('downGps').innerText = "GPS: LOCK FAILED";
-                }, { enableHighAccuracy: true, timeout: 10000 });
+                }, () => { document.getElementById('downGps').innerText = "GPS: LOCK FAILED"; }, { enableHighAccuracy: true, timeout: 10000 });
             } else if (userMarker) {
                 let ll = userMarker.getLatLng();
                 document.getElementById('downGps').innerText = "GPS: " + ll.lat.toFixed(5) + ", " + ll.lng.toFixed(5);
-            } else {
-                document.getElementById('downGps').innerText = "GPS: NOT SUPPORTED";
-            }
+            } else { document.getElementById('downGps').innerText = "GPS: NOT SUPPORTED"; }
 
             document.getElementById('downAlert').style.display = 'flex';
             if(navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 500, 200, 1000]);
             logAction('EMERGENCY', currentUserName + ' (' + currentUserDept + ') TRIGGERED OFFICER DOWN');
         }
 
-        function cancelOfficerDown() {
-            document.getElementById('downAlert').style.display = 'none';
-            showToast("ALERT ACKNOWLEDGED");
-        }
+        function cancelOfficerDown() { document.getElementById('downAlert').style.display = 'none'; showToast("ALERT ACKNOWLEDGED"); }
 
         function enableAutoDown() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-auto');
-            
             if(motionActive) {
-                motionActive = false;
-                if(stillnessTimer) clearInterval(stillnessTimer);
-                window.removeEventListener('devicemotion', handleMotion);
-                btn.classList.remove('active');
-                showToast("AUTO-DOWN MONITOR DISABLED");
-                return;
+                motionActive = false; if(stillnessTimer) clearInterval(stillnessTimer); window.removeEventListener('devicemotion', handleMotion);
+                btn.classList.remove('active'); showToast("AUTO-DOWN MONITOR DISABLED"); return;
             }
-
             if (typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission().then(state => { 
-                    if (state === 'granted') { 
-                        motionActive = true;
-                        btn.classList.add('active');
-                        startMotionMonitor(); 
-                    } else { 
-                        showToast("MOTION PERMISSION DENIED"); 
-                    } 
+                    if (state === 'granted') { motionActive = true; btn.classList.add('active'); startMotionMonitor(); } 
+                    else { showToast("MOTION PERMISSION DENIED"); } 
                 });
-            } else { 
-                motionActive = true;
-                btn.classList.add('active');
-                startMotionMonitor(); 
-            }
+            } else { motionActive = true; btn.classList.add('active'); startMotionMonitor(); }
         }
 
         function startMotionMonitor() {
             showToast("🛡️ AUTO-DOWN ACTIVE. ALERTS ON IMPACT OR 45s STILLNESS.");
             logAction('SYSTEM', 'Auto-Officer Down Monitor Enabled (45s Limit)');
             lastMoveTime = Date.now();
-            
             window.addEventListener('devicemotion', handleMotion);
-            
             stillnessTimer = setInterval(() => {
                 if (!motionActive) return;
                 let timeSinceMove = Date.now() - lastMoveTime;
-                if (timeSinceMove > NO_MOVEMENT_LIMIT) {
-                    motionActive = false; 
-                    clearInterval(stillnessTimer);
-                    triggerOfficerDown();
-                }
+                if (timeSinceMove > NO_MOVEMENT_LIMIT) { motionActive = false; clearInterval(stillnessTimer); triggerOfficerDown(); }
             }, 5000);
         }
 
         function handleMotion(e) {
             if (!motionActive) return;
-            let acc = e.acceleration;
-            if (!acc) return;
-            
+            let acc = e.acceleration; if (!acc) return;
             if (Math.abs(acc.x) > 15 || Math.abs(acc.y) > 15 || Math.abs(acc.z) > 15) {
-                motionActive = false;
-                if(stillnessTimer) clearInterval(stillnessTimer);
-                triggerOfficerDown();
-                return;
+                motionActive = false; if(stillnessTimer) clearInterval(stillnessTimer); triggerOfficerDown(); return;
             }
-            
-            if (Math.abs(acc.x) > 1 || Math.abs(acc.y) > 1 || Math.abs(acc.z) > 1) {
-                lastMoveTime = Date.now();
-            }
+            if (Math.abs(acc.x) > 1 || Math.abs(acc.y) > 1 || Math.abs(acc.z) > 1) { lastMoveTime = Date.now(); }
         }
 
         function toggleTrapNTrace() {
             if(isTerminated) return;
             let btn = document.getElementById('btn-trace');
             if(trapNTraceActive) {
-                clearInterval(traceInterval);
-                trapNTraceActive = false;
-                btn.classList.remove('active');
-                btn.innerText = "📡 TRACE";
-                if(radarMarker) { map.removeLayer(radarMarker); radarMarker = null; }
-                showToast("TRAP N TRACE DISABLED");
+                clearInterval(traceInterval); trapNTraceActive = false; btn.classList.remove('active'); btn.innerText = "📡 TRACE";
+                if(radarMarker) { map.removeLayer(radarMarker); radarMarker = null; } showToast("TRAP N TRACE DISABLED");
             } else {
-                trapNTraceActive = true;
-                btn.classList.add('active');
-                btn.innerText = "📡 SCAN";
-                showToast("TRAP N TRACE SCANNING...");
+                trapNTraceActive = true; btn.classList.add('active'); btn.innerText = "📡 SCAN"; showToast("TRAP N TRACE SCANNING...");
                 logAction('TRACE', 'Trap N Trace Activated');
                 let radarIcon = L.divIcon({ className: 'radar-wrapper', html: '<div class="radar-circle"><div class="radar-sweep"></div></div>', iconSize: [400, 400], iconAnchor: [200, 200] });
                 radarMarker = L.marker(perimeterCenter, { icon: radarIcon, interactive: false }).addTo(map);
-                setTimeout(simulatePing, 4000);
-                traceInterval = setInterval(simulatePing, 15000);
+                setTimeout(simulatePing, 4000); traceInterval = setInterval(simulatePing, 15000);
             }
         }
         function simulatePing() {
-            let lat = perimeterCenter[0] + (Math.random() - 0.5) * 0.004;
-            let lng = perimeterCenter[1] + (Math.random() - 0.5) * 0.004;
+            let lat = perimeterCenter[0] + (Math.random() - 0.5) * 0.004; let lng = perimeterCenter[1] + (Math.random() - 0.5) * 0.004;
             let pingMarker = L.circleMarker([lat, lng], { radius: 10, fillColor: 'orange', color: 'red', fillOpacity: 1, weight: 3, className: 'trace-ping' }).addTo(map);
-            pingMarker.bindTooltip("📱 PING", { permanent: true, direction: 'top' });
-            map.setView([lat, lng], 17);
-            if(navigator.vibrate) navigator.vibrate(500);
-            showToast("📡 TRACE HIT: PING DETECTED");
+            pingMarker.bindTooltip("📱 PING", { permanent: true, direction: 'top' }); map.setView([lat, lng], 17);
+            if(navigator.vibrate) navigator.vibrate(500); showToast("📡 TRACE HIT: PING DETECTED");
             logAction('TRACE', 'Fugitive Ping Detected at ' + lat.toFixed(5) + ', ' + lng.toFixed(5));
         }
 
         function showReplay() {
             let logHtml = searchLog.map(entry => `<div><b style="color:gold;">[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             if(logHtml === '') logHtml = '<div>No actions recorded yet.</div>';
-            document.getElementById('replayLogContent').innerHTML = logHtml;
-            document.getElementById('replayModal').classList.remove('hidden');
+            document.getElementById('replayLogContent').innerHTML = logHtml; document.getElementById('replayModal').classList.remove('hidden');
         }
 
         function printReplayLog() {
             let logHtml = searchLog.map(entry => `<div><b>[${entry.time}]</b> ${entry.action}: ${entry.detail}</div>`).join('');
             if(logHtml === '') logHtml = '<div>No actions recorded yet.</div>';
-            
             let win = window.open('', '_blank');
             win.document.write(`<html><head><title>TACNET Replay Log</title><style>body{font-family:monospace;padding:20px;}h1{color:#002f6c;text-align:center;}</style></head><body><h1>TACNET REPLAY LOG</h1>${logHtml}</body></html>`);
-            win.document.close();
-            win.focus();
-            setTimeout(() => { win.print(); win.close(); }, 500);
+            win.document.close(); win.focus(); setTimeout(() => { win.print(); win.close(); }, 500);
         }
 
         function emailReplayLog() {
             let logText = searchLog.map(entry => `[${entry.time}] ${entry.action}: ${entry.detail}`).join('\n');
             if(logText === '') logText = 'No actions recorded yet.';
-            
-            let subject = "TACNET Search Replay Log";
-            let body = "TACNET SEARCH REPLAY LOG\n\n" + logText + "\n\nGenerated by TACNET Multi-Agency App.";
+            let subject = "TACNET Search Replay Log"; let body = "TACNET SEARCH REPLAY LOG\n\n" + logText + "\n\nGenerated by TACNET Multi-Agency App.";
             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
-        // --- REPORT FUNCTIONS ---
         function previewPhotos() {
-            const files = document.getElementById('repPhotos').files;
-            const preview = document.getElementById('photoPreview');
-            preview.innerHTML = '';
+            const files = document.getElementById('repPhotos').files; const preview = document.getElementById('photoPreview'); preview.innerHTML = '';
             for (let i = 0; i < files.length; i++) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.onclick = function() {
-                        document.getElementById('photoViewerImg').src = this.src;
-                        document.getElementById('photoViewer').classList.remove('hidden');
-                    };
+                    const img = document.createElement('img'); img.src = e.target.result;
+                    img.onclick = function() { document.getElementById('photoViewerImg').src = this.src; document.getElementById('photoViewer').classList.remove('hidden'); };
                     preview.appendChild(img);
                 }
                 reader.readAsDataURL(files[i]);
@@ -904,64 +797,34 @@
         }
 
         function emailReport() {
-            let date = document.getElementById('repDate').value;
-            let loc = document.getElementById('repLoc').value;
-            let inc = document.getElementById('repInc').value;
-            let disp = document.getElementById('repDisp').value;
-            let notes = document.getElementById('repNotes').value;
+            let date = document.getElementById('repDate').value; let loc = document.getElementById('repLoc').value; let inc = document.getElementById('repInc').value;
+            let disp = document.getElementById('repDisp').value; let notes = document.getElementById('repNotes').value;
             let logText = searchLog.map(entry => `[${entry.time}] ${entry.action}: ${entry.detail}`).join('\n');
-
             let subject = `TACNET Official Incident Report - ${inc} - ${date}`;
-            let body = `TACNET OFFICIAL INCIDENT REPORT\n=========================================\n\n`;
-            body += `FEDERAL - STATE - LOCAL MULTI-AGENCY TASK FORCE SEARCH APP\n\n`;
-            body += `DATE/TIME: ${date}\nLOCATION: ${loc}\nINCIDENT TYPE: ${inc}\nDISPOSITION: ${disp}\n\n`;
-            body += `NOTES:\n${notes}\n\n`;
-            body += `ITEMIZED SEARCH LOG:\n${logText}\n\n`;
-            body += `(Note: To include photos and signature, please use the PRINT / SAVE PDF option and attach the PDF to your email.)`;
-
+            let body = `TACNET OFFICIAL INCIDENT REPORT\n=========================================\n\nFEDERAL - STATE - LOCAL MULTI-AGENCY TASK FORCE SEARCH APP\n\nDATE/TIME: ${date}\nLOCATION: ${loc}\nINCIDENT TYPE: ${inc}\nDISPOSITION: ${disp}\n\nNOTES:\n${notes}\n\nITEMIZED SEARCH LOG:\n${logText}\n\n(Note: To include photos and signature, please use the PRINT / SAVE PDF option and attach the PDF to your email.)`;
             window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         }
 
         function terminateSearch() {
             if(isTerminated) return;
-            isTerminated = true;
-            map.dragging.disable();
-            map.touchZoom.disable();
-            map.doubleClickZoom.disable();
-            map.scrollWheelZoom.disable();
-            map.boxZoom.disable();
-            map.keyboard.disable();
+            isTerminated = true; map.dragging.disable(); map.touchZoom.disable(); map.doubleClickZoom.disable(); map.scrollWheelZoom.disable(); map.boxZoom.disable(); map.keyboard.disable();
             document.getElementById('map').classList.add('locked-overlay');
-            logAction('SYSTEM', 'SEARCH TERMINATED AND LOCKED DOWN');
-            showToast("SEARCH TERMINATED");
+            logAction('SYSTEM', 'SEARCH TERMINATED AND LOCKED DOWN'); showToast("SEARCH TERMINATED");
             document.getElementById('terminateModal').classList.remove('hidden');
         }
 
         function startNewSearch() {
-            isTerminated = false;
-            searchLog = [];
-            document.getElementById('map').classList.remove('locked-overlay');
-            map.dragging.enable();
-            map.touchZoom.enable();
-            map.doubleClickZoom.enable();
-            map.scrollWheelZoom.enable();
-            map.boxZoom.enable();
-            map.keyboard.enable();
+            isTerminated = false; searchLog = []; document.getElementById('map').classList.remove('locked-overlay');
+            map.dragging.enable(); map.touchZoom.enable(); map.doubleClickZoom.enable(); map.scrollWheelZoom.enable(); map.boxZoom.enable(); map.keyboard.enable();
             clearMap();
-            document.getElementById('terminateModal').classList.add('hidden');
-            document.getElementById('reportModal').classList.add('hidden'); 
+            document.getElementById('terminateModal').classList.add('hidden'); document.getElementById('reportModal').classList.add('hidden'); 
             showToast("READY FOR NEW SEARCH");
         }
         
-        // Clean up Firebase when user closes the app
-        window.addEventListener('beforeunload', () => {
-            if (fbDb && watchId !== null) {
-                fbDb.ref('officers/' + currentUserId).remove();
-            }
-        });
+        window.addEventListener('beforeunload', () => { if (fbDb && watchId !== null) { fbDb.ref('officers/' + currentUserId).remove(); } });
     </script>
 
-    <!-- Firebase SDK (Live Multiplayer Radio Tower) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 
@@ -977,18 +840,11 @@
             appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase safely
         try {
             firebase.initializeApp(firebaseConfig);
             fbDb = firebase.database();
-        } catch(e) {
-            console.error("Firebase init error", e);
-        }
+        } catch(e) { console.error("Firebase init error", e); }
     </script>
 </body>
 </html>
 ```
-
-Save this to Netlify/GitHub. The homepage image will be perfectly sized, and your bottom toolbar is now physically bolted to the bottom of the screen. It cannot move or scroll away anymore. 
-
-Let me know as soon as you see it locked in place!
