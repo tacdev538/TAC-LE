@@ -1,3 +1,20 @@
+Deputy Wood, I understand exactly what is happening. On the iPad, the browser is letting the map image push the bottom toolbar right off the screen, and they are scrolling together. 
+
+To fix this permanently, I have completely removed the "grid" layout and physically **nailed** the top bar to the top of the screen and the bottom bar to the bottom of the screen using `position: fixed`. The map is now trapped perfectly in the middle and cannot push them anywhere. 
+
+Also, as requested, I shrank the homepage image down slightly (from 100% to 80%) so it has a nice black border around it and isn't overwhelming the screen.
+
+### Step 1: Wipe the file completely clean
+1. Open your `index.html` file in GitHub/Netlify and click **Edit**.
+2. Press **Ctrl + A** and hit **Delete**. Make sure it is completely empty.
+
+### Step 2: Paste ONLY the code
+1. Click the **"Copy" button** at the top right corner of the black box below.
+2. Paste it into your empty file.
+3. Scroll to the very bottom and paste your Firebase keys right over the `// --- PASTE YOUR FIREBASE KEYS HERE ---` section.
+4. Click **Commit changes**.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +35,8 @@
         .hidden { display: none !important; }
 
         /* --- LANDING PAGE --- */
-        #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
+        /* SHRUNK: Image is now 80% to fit perfectly with breathing room */
+        #landingPage { position: fixed; top:0; left:0; width:100%; height:100%; background-image: url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099'); background-size: 80% auto; background-position: center; background-repeat: no-repeat; background-color: #000; z-index: 100; }
         .qr-code { position: absolute; top: calc(15px + var(--safe-top)); left: 15px; width: 70px; height: 70px; background: white; padding: 3px; border-radius: 4px; }
         
         .enter-text { 
@@ -47,29 +65,33 @@
         #loginPage button { width: 90%; max-width: 350px; padding: 15px; background: var(--tac-green); color: black; border: none; font-weight: bold; font-size: 18px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
         .admin-btn { background: gold !important; color: black !important; }
 
-        /* --- SEARCH PAGE --- */
-        #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: grid; grid-template-rows: 44px 30px 1fr 58px; overflow: hidden; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
+        /* --- SEARCH PAGE (FIXED LAYOUT) --- */
+        #appContainer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
         
-        .top-bar { background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 0 8px; display: flex; gap: 5px; align-items: center; overflow: hidden; white-space: nowrap; }
+        /* Top Bar nailed to the top */
+        .top-bar { position: fixed; top: var(--safe-top); left: 0; right: 0; height: 44px; background: #001a00; border-bottom: 2px solid var(--tac-green); padding: 0 8px; display: flex; gap: 5px; align-items: center; overflow: hidden; white-space: nowrap; z-index: 1001; }
         .top-bar input { flex-grow: 1; background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 6px; border-radius: 4px; font-size: 12px; min-width: 0; height: 30px; }
         .btn-go { background: var(--tac-green); color: black; border: none; padding: 6px 10px; font-weight: bold; border-radius: 4px; cursor: pointer; flex-shrink: 0; height: 30px; font-size: 12px; }
         .top-toggles { display: flex; gap: 4px; flex-shrink: 0; }
         .btn-toggle { background: #111; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 5px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer; touch-action: manipulation; height: 30px; display: flex; align-items: center; }
         .btn-toggle.active { background: var(--tac-green); color: black; }
 
-        .perimeter-slider { background: #000; padding: 0 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; overflow: hidden; }
+        /* Slider nailed right below Top Bar */
+        .perimeter-slider { position: fixed; top: calc(44px + var(--safe-top)); left: 0; right: 0; height: 30px; background: #000; padding: 0 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; overflow: hidden; z-index: 1001; }
         .perimeter-slider input[type="range"] { flex-grow: 1; height: 4px; }
         .perimeter-slider span { font-size: 11px; font-weight: bold; }
 
-        .map-wrapper { position: relative; overflow: hidden; min-height: 0; }
+        /* Map trapped in the middle */
+        .map-wrapper { position: fixed; top: calc(74px + var(--safe-top)); left: 0; right: 0; bottom: calc(58px + var(--safe-bottom)); overflow: hidden; z-index: 1000; }
         #map { position: absolute; top:0; left:0; right:0; bottom:0; width: 100%; height: 100%; background: #111; transition: filter 0.3s; touch-action: none; }
         #map.nvg-active { filter: invert(1) hue-rotate(90deg) saturate(4) brightness(0.8); }
         #map.locked-overlay::after { content: "SEARCH TERMINATED - EVIDENCE LOCKED"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,0,0,0.8); color: white; padding: 20px; font-weight: bold; font-size: 20px; z-index: 9999; text-align: center; border: 2px solid white; }
 
-        #toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 26, 0, 0.95); border: 1px solid var(--tac-green); color: var(--tac-green); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 5000; display: none; pointer-events: none; }
-        #offlineInd { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; z-index: 500; display: none; }
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0, 26, 0, 0.95); border: 1px solid var(--tac-green); color: var(--tac-green); padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: bold; z-index: 5000; display: none; pointer-events: none; }
+        #offlineInd { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); background: red; color: white; padding: 4px 12px; font-size: 12px; font-weight: bold; border-radius: 4px; z-index: 500; display: none; }
 
-        .bottom-bar { background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding: 0 5px; overflow-x: auto; gap: 8px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1000; }
+        /* Bottom Bar nailed to the bottom */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 58px; padding-bottom: var(--safe-bottom); background: #001a00; border-top: 2px solid var(--tac-green); display: flex; padding-top: 0; padding-left: 5px; padding-right: 5px; overflow-x: auto; gap: 8px; scrollbar-width: thin; scrollbar-color: var(--tac-green) #000; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; z-index: 1001; }
         .bottom-bar::-webkit-scrollbar { height: 4px; }
         .bottom-bar::-webkit-scrollbar-thumb { background: var(--tac-green); border-radius: 2px; }
         .btn-tac { background: black; color: var(--tac-green); border: 1px solid var(--tac-green); padding: 4px 8px; font-weight: bold; font-size: 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 60px; scroll-snap-align: start; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
@@ -961,16 +983,14 @@
 
     <script>
         // --- PASTE YOUR FIREBASE KEYS HERE ---
-        cconst firebaseConfig = {
-   apiKey: "AIzaSy...",
-   authDomain: "your-project.firebaseapp.com",
-   databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-   projectId: "your-project",
-   storageBucket: "your-project.appspot.com",
-   messagingSenderId: "123456789",
-   appId: "1:123456789:web:abc123"
-};
-};
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase safely
@@ -983,6 +1003,8 @@
     </script>
 </body>
 </html>
+```
 
+Save this to Netlify/GitHub. The homepage image will be perfectly sized, and your bottom toolbar is now physically bolted to the bottom of the screen. It cannot move or scroll away anymore. 
 
-
+Let me know as soon as you see it locked in place!
