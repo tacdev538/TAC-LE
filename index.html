@@ -820,9 +820,15 @@
     <script>
         // --- PASTE YOUR FIREBASE KEYS HERE ---
         const firebaseConfig = {
-          BKNGpLsqGBorYyuQuXWV92Kp5TcNXymA-MqBB2jg2BVzzRkpz0UsBSdBPvIjaZjWxPnbtaLEkDHgJk4wDHHcJIQ
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abc123"
+       var admin = require("firebase-admin");
+
+var serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://tacnet-law-enforcement-default-rtdb.firebaseio.com"
+});
+
         };
 
         try {
