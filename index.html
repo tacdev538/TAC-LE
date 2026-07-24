@@ -69,36 +69,150 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-famil
 .ack{margin-top:15px;padding:12px 30px;background:#fff;color:red;font-weight:900;border:none;border-radius:6px;font-size:16px;cursor:pointer}
 /* TRACE PULSE */
 .trace{width:300px;height:300px;border-radius:50%;border:2px solid rgba(255,0,0,0.8);background:rgba(255,0,0,0.08);position:relative}
-.trace .sweep{position:absolute;top:50%;left:50%;width:150px;height:2px;background:linear-gradient(90deg,transparent,red);transform-origin:left center;animation:sweep 2s linear infinite}
-@keyframes sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.sweep{position:absolute;top:0;left:50%;width:50%;height:100%;background:linear-gradient(90deg,rgba(255,0,0,0.4),transparent);transform-origin:left center;animation:spin 2s linear infinite}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-<div id="landing"><div class="landing-box"><h1>TACNET</h1><div class="sub1">TACTICAL NETWORK - MULTI-AGENCY LIVE</div><div class="sub2">REAL TIME • ENCRYPTED • GEO-TRACKED</div><div class="goldline"></div><div class="creator">CREATED BY</div><div class="name">EARL MORRISON</div><div class="rank">RETIRED DEPUTY SHERIFF • LOS ANGELES COUNTY</div><button class="btn-enter" onclick="enter()">▶ ENTER TACNET</button><div class="respect">RESPECT IS EARNED IN THE STREETS</div></div></div>
-<div id="login" class="hidden"><h2>UNIT LOGIN</h2><select id="dept"><option>LOS ANGELES SHERIFF</option><option>LAPD</option><option>CHP</option><option>BEVERLY HILLS PD</option><option>FBI</option><option>DEA</option><option>US MARSHALS</option></select><input id="badge" placeholder="BADGE / ID"><input id="call" placeholder="CALLSIGN / NAME"><button onclick="doLogin()">JOIN TACNET</button></div>
-<div id="app" class="hidden"><div class="topbar"><input id="addr" placeholder="SEARCH ADDRESS"><button class="btn btn-go" onclick="searchAddr()">GO</button><button class="btn" id="b-str" onclick="setLayer('str')">STR</button><button class="btn" id="b-sat" onclick="setLayer('sat')">SAT</button><button class="btn" id="b-ter" onclick="setLayer('ter')">TER</button><button class="btn" id="b-nvg" onclick="toggleNVG()">NVG</button></div><div class="perim">PERIM: <input type="range" id="rng" min="100" max="5000" value="1000" oninput="setPerim(this.value)"><span id="rngV">1000 FT</span></div><div id="map"></div><div class="bottom"><div class="bbtn" id="bb-red" onclick="toggleRed()">🔴<span>RED PEN</span></div><div class="bbtn" onclick="eraseLast()">🧹<span>ERASER</span></div><div class="bbtn" id="bb-lock" onclick="toggleLock()">🔒<span>LOCK</span></div><div class="bbtn" onclick="openMarks()">📍<span>MARKS</span></div><div class="bbtn down" onclick="triggerDown()">🚨<span>OFFICER DOWN</span></div><div class="bbtn" id="bb-trace" onclick="toggleTrace()">📡<span>TRACE DROP PING</span></div><div class="bbtn" id="bb-gps" onclick="toggleGPS()">🛰️<span>LIVE GPS</span></div><div class="bbtn" onclick="clearAll()">❌<span>CLEAR</span></div></div></div>
-<div id="markModal" class="modal hidden"><div class="box"><h3>DROP TACTICAL MARK</h3><div class="grid"><button class="gbtn" onclick="pick('SUSPECT')">SUSPECT</button><button class="gbtn" onclick="pick('WEAPON')">WEAPON</button><button class="gbtn" onclick="pick('VEHICLE')">VEHICLE</button><button class="gbtn" onclick="pick('EVIDENCE')">EVIDENCE</button><button class="gbtn" onclick="pick('K9')">K9</button><button class="gbtn" onclick="pick('PERIM')">PERIM</button><button class="gbtn" onclick="pick('ENTRY')">ENTRY</button><button class="gbtn" onclick="pick('EXIT')">EXIT</button><button class="gbtn" onclick="pick('DANGER')">DANGER</button></div><button class="gbtn" style="width:100%;margin-top:10px" onclick="document.getElementById('markModal').classList.add('hidden')">CLOSE</button></div></div>
+<div id="landing">
+<div class="landing-box">
+<h1>TACNET</h1>
+<div class="sub1">MULTI-AGENCY-TASK-FORCE-SEARCH-APP</div>
+<div class="sub2">USA'S FIRST MULTI-AGENCY APP BUILT BY LAW ENFORCEMENT FOR LAW ENFORCEMENT</div>
+<div class="goldline"></div>
+<div class="creator">APP CREATOR</div>
+<div class="name">EARL WOOD</div>
+<div class="rank">DEPUTY SHERIFF RETIRED VIRGINIA</div>
+<button class="btn-enter" onclick="enterApp()">🛡️ ENTER</button>
+<div class="respect">WITH RESPECT TO ALL LAW ENFORCEMENT</div>
+</div>
+</div>
+
+<div id="login" class="hidden">
+<h2>TACNET LOGIN</h2>
+<select id="role"><option value="searcher">Searcher / Officer</option><option value="commander">Commander</option><option value="admin">Admin (Earl Wood)</option></select>
+<input id="lName" placeholder="Your Name">
+<input id="lDept" placeholder="Department">
+<input id="lCode" class="hidden" type="password" placeholder="Access Code">
+<button onclick="doLogin()">LOG IN & JOIN LIVE MAP</button>
+<div id="fbStat" style="margin-top:12px;font-size:11px;color:#888">FIREBASE: CONNECTING...</div>
+</div>
+
+<div id="app" class="hidden">
+<div class="topbar">
+<button class="btn" onclick="location.reload()">EXIT</button>
+<input id="addr" placeholder="Address..." value="Amherst, VA">
+<button class="btn btn-go" onclick="searchAddr()">GO</button>
+<button class="btn" id="b-str" onclick="setLayer('str')">STR</button>
+<button class="btn active" id="b-sat" onclick="setLayer('sat')">SAT</button>
+<button class="btn" id="b-ter" onclick="setLayer('ter')">TER</button>
+<button class="btn" id="b-nvg" onclick="toggleNVG()">NVG</button>
+</div>
+<div class="perim">
+<span>PERIMETER:</span>
+<input type="range" id="rng" min="100" max="5000" value="2500" oninput="setPerim(this.value)">
+<span id="rngV">2500 FT</span>
+<span id="liveC" style="color:gold;margin-left:auto">0 LIVE</span>
+</div>
+<div id="map"></div>
+<div class="bottom">
+<button class="bbtn down" onclick="triggerDown()">🚨<br>DOWN</button>
+<button class="bbtn" id="bb-gps" onclick="toggleGPS()">📡<br>LIVE GPS</button>
+<button class="bbtn" id="bb-trace" onclick="toggleTrace()">📡<br>TRACE</button>
+<button class="bbtn" id="bb-red" onclick="toggleRed()">🔴<br>RED PEN</button>
+<button class="bbtn" onclick="eraseLast()">🧽<br>ERASE</button>
+<button class="bbtn" id="bb-lock" onclick="toggleLock()">🔒<br>LOCK</button>
+<button class="bbtn" onclick="openMarks()">📍<br>MARK</button>
+<button class="bbtn" onclick="clearAll()">🛑<br>CLEAR</button>
+</div>
+</div>
+
+<div id="markModal" class="modal hidden" onclick="if(event.target===this)this.classList.add('hidden')">
+<div class="box"><h3>PLACE UNIT - TAP MAP AFTER</h3>
+<div class="grid">
+<button class="gbtn" onclick="pick('LE')" style="border-color:blue;color:blue">🔵 LE<br>LAW</button>
+<button class="gbtn" onclick="pick('K9')" style="border-color:lightblue;color:lightblue">🔵 K9<br>TEAM</button>
+<button class="gbtn" onclick="pick('SAR')" style="border-color:red;color:red">🔴 SAR<br>SEARCH</button>
+<button class="gbtn" onclick="pick('CIV')" style="border-color:#00ff41;color:#00ff41">🟢 CIV<br>CIVILIAN</button>
+<button class="gbtn" onclick="pick('ART')" style="border-color:orange;color:orange">🟠 ART<br>ARTICLE</button>
+<button class="gbtn" onclick="pick('CP')" style="border-color:yellow;color:yellow">🟡 CMD<br>POST</button>
+<button class="gbtn" onclick="pick('DRN')" style="border-color:gray;color:gray">⚪ DRN<br>DRONE</button>
+<button class="gbtn" onclick="pick('SUS')" style="border-color:purple;color:purple">🟣 SUS<br>SUSPECT</button>
+<button class="gbtn" onclick="pick('VEH')" style="border-color:#fff;color:#fff">⚫ VEH<br>VEHICLE</button>
+</div></div>
+</div>
+
+<div id="downAlert"><div class="downBox"><h1>🚨 OFFICER DOWN 🚨</h1><h2 id="dName">UNKNOWN</h2><p id="dDept" style="color:gold"></p><p id="dGps" style="color:#00ff41"></p><button class="ack" onclick="closeDown()">ACKNOWLEDGE - RESPONDING</button></div></div>
 <div id="toast"></div>
-<div id="downAlert"><div class="downBox"><h1>🚨 OFFICER DOWN 🚨</h1><h2 id="dName">OFFICER</h2><div id="dDept">DEPT</div><div id="dGps">GPS</div><h2>NEEDS IMMEDIATE ASSISTANCE</h2><button class="ack" onclick="closeDown()">ACKNOWLEDGE</button></div></div>
+
 <script>
-let map,layer,perimC=[34.0522,-118.2437],perimCircle,redDot,userM,watch=null,myId,myName,myDept,fb,other={},activeMark=null,redPen=false,isLock=false,isDrawing=false,curLine,drawLayers=[],traceOn=false,radar,traceInt;
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
-function enter(){document.getElementById('landing').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
+const firebaseConfig={apiKey:"AIzaSyDFzxwNI8eLhjlsZQf_sKpboe_zqLkNZfg",authDomain:"tacnet-law-enforcement.firebaseapp.com",databaseURL:"https://tacnet-law-enforcement-default-rtdb.firebaseio.com",projectId:"tacnet-law-enforcement",storageBucket:"tacnet-law-enforcement.firebasestorage.app",messagingSenderId:"85046927848",appId:"1:85046927848:web:8ebe08d72b9d252e50445d"};
+let fb=null,map,layer,perimC=[37.5896,-79.0513],perimCircle,redDot,activeMark=null,redPen=false,isLock=false,isDrawing=false,curLine=null,drawLayers=[],userM=null,watch=null,myId='u-'+Math.random().toString(36).substr(2,6),other={},traceOn=false,traceInt=null,radar=null;
+let myName='OFFICER',myDept='AMHERST';
+const colors={LE:'blue',K9:'#00bfff',SAR:'red',CIV:'#00ff41',ART:'orange',CP:'yellow',DRN:'gray',SUS:'purple',VEH:'black'};
+
+try{firebase.initializeApp(firebaseConfig);fb=firebase.database();document.getElementById('fbStat').innerText='FIREBASE: CONNECTED '+myId;}catch(e){document.getElementById('fbStat').innerText='FIREBASE ERROR '+e.message;}
+
+function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3000);}
+function enterApp(){document.getElementById('landing').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
+document.getElementById('role').addEventListener('change',e=>{document.getElementById('lCode').classList.toggle('hidden',e.target.value==='searcher');});
 function doLogin(){
-myDept=document.getElementById('dept').value;myName=document.getElementById('call').value||'UNIT-1';
-if(!document.getElementById('badge').value){toast('ENTER BADGE');return;}
-myId=Date.now()+''+Math.floor(Math.random()*999);
-document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');
-initMap();initFB();
+let r=document.getElementById('role').value,c=document.getElementById('lCode').value;
+if(r==='admin'&&c!=='1041'){alert('BAD ADMIN CODE');return;}
+if(r==='commander'&&c!=='1042'){alert('BAD COMMANDER CODE');return;}
+myName=document.getElementById('lName').value||'OFFICER-'+myId.substr(-3);
+myDept=document.getElementById('lDept').value||'AMHERST';
+document.getElementById('login').classList.add('hidden');
+document.getElementById('app').classList.remove('hidden');
+setTimeout(initMap,120);
 }
 function initMap(){
-map=L.map('map',{zoomControl:false,doubleClickZoom:false}).setView(perimC,13);
-layer=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:22}).addTo(map);
-drawPerim(1000);setupDraw();
+map=L.map('map',{zoomControl:false,maxZoom:22}).setView(perimC,15);
+L.control.zoom({position:'topright'}).addTo(map);
+layer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map);
+drawPerim(2500);
+setupDraw();
+if(fb){
+fb.ref('officers').on('value',s=>{
+let d=s.val()||{};document.getElementById('liveC').innerText=Object.keys(d).length+' LIVE';
+for(let id in other){if(!d[id]){map.removeLayer(other[id]);delete other[id];}}
+for(let id in d){if(id===myId)continue;let o=d[id];if(!o.lat)continue;
+if(other[id]){other[id].setLatLng([o.lat,o.lng]);other[id].getTooltip().setContent(o.name+' - '+o.dept);}
+else{
+let col=o.dept==='VSP'?'blue':(o.name.includes('K9')?'#00bfff':'#00ff41');
+let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}66"></div><div class="dot" style="background:${col}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
+other[id]=L.marker([o.lat,o.lng],{icon:ic}).addTo(map);
+other[id].bindTooltip(o.name+' - '+o.dept,{permanent:true,direction:'top'});
+if(!other[id]._notified){toast('OFFICER JOINED: '+o.name);other[id]._notified=true;}
+}}
+});
+fb.ref('.info/connected').on('value',snap=>{if(snap.val()){fb.ref('officers/'+myId).onDisconnect().remove();}});
+fb.ref('down').on('value',snap=>{
+let v=snap.val();if(!v)return;
+if(Date.now()-v.ts>120000)return;
+document.getElementById('dName').innerText=v.name;
+document.getElementById('dDept').innerText='DEPT: '+v.dept;
+document.getElementById('dGps').innerText='GPS: '+v.lat.toFixed(5)+','+v.lng.toFixed(5);
+document.getElementById('downAlert').style.display='flex';
+if(navigator.vibrate)navigator.vibrate([500,200,500,200,1000]);
+if(v.id!==myId)toast('🚨 OFFICER DOWN: '+v.name);
+});
+fb.ref('pings').on('child_added',snap=>{
+let p=snap.val();if(!p||Date.now()-p.ts>300000)return;
+let m=L.circleMarker([p.lat,p.lng],{radius:12,fillColor:'orange',color:'red',fillOpacity:0.9,weight:3}).addTo(map);
+m.bindTooltip('📱 TOWER PING: '+p.lat.toFixed(4),{permanent:true});
+setTimeout(()=>map.removeLayer(m),60000);
+});
+toast('TACNET LIVE - TAP LIVE GPS');
+}else{toast('OFFLINE MODE');}
 map.on('click',e=>{
-if(activeMark){let m=L.circleMarker(e.latlng,{radius:12,fillColor:'orange',color:'#fff',weight:2,fillOpacity:1}).addTo(map);
-m.bindTooltip(activeMark,{permanent:true});
-if(fb)fb.ref('marks/'+Date.now()).set({type:activeMark,lat:e.latlng.lat,lng:e.latlng.lng,by:myName});
+if(isLock)return;
+if(activeMark){
+let col=colors[activeMark]||'blue';
+let mk=L.circleMarker(e.latlng,{radius:11,fillColor:col,color:'#fff',weight:2,fillOpacity:1}).addTo(map);
+mk.bindTooltip(activeMark+' - '+myName,{permanent:true,direction:'top'});
+mk.on('click',()=>map.removeLayer(mk));
+if(fb)fb.ref('markers/'+Date.now()).set({type:activeMark,lat:e.latlng.lat,lng:e.latlng.lng,by:myName});
 activeMark=null;toast(activeMark+' PLACED');}
 });
 }
