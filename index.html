@@ -1,305 +1,330 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TACNET V6 FINAL - LIVE MULTI-AGENCY</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>TACNET V7 COMMANDER</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
-:root{--green:#00ff41;--red:#ff0000;--gold:#FFD700;--bg:#000}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--green)}
+:root{--g:#00ff41;--gold:#FFD700;--bg:#000}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial;color:var(--g)}
 .hidden{display:none !important}
-/* LANDING */
-#landing{position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;background:#000 url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000') center/cover no-repeat}
-#landing::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3)}
-.landing-box{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.landing-box h1{font-size:clamp(3rem,10vw,6rem);color:#c0c0c0;letter-spacing:8px;text-shadow:2px 2px 8px #000, 0 0 20px rgba(255,255,255,0.3);font-weight:900}
-.landing-box .sub1{font-size:18px;color:#fff;background:rgba(0,0,0,0.6);padding:6px 18px;border-radius:20px;margin:10px 0;letter-spacing:2px;font-weight:bold}
-.landing-box .sub2{font-size:12px;color:#ddd;background:rgba(0,0,0,0.6);padding:5px 12px;border-radius:10px;margin-bottom:10px}
-.goldline{width:300px;height:3px;background:var(--gold);margin:15px 0;box-shadow:0 0 10px var(--gold)}
-.creator{color:var(--gold);font-size:16px;letter-spacing:2px}
-.name{color:var(--gold);font-size:clamp(1.8rem,5vw,2.8rem);font-weight:900;text-shadow:2px 2px 4px #000, 0 0 15px var(--gold)}
-.rank{color:#fff;font-size:14px;letter-spacing:1px;margin-bottom:25px}
-.btn-enter{background:#16a34a;color:#fff;border:3px solid #fff;font-size:26px;font-weight:900;padding:12px 60px;border-radius:50px;cursor:pointer;box-shadow:0 0 20px #16a34a, 0 4px 10px #000;display:flex;align-items:center;gap:10px}
-.btn-enter:active{transform:scale(0.95)}
-.respect{margin-top:15px;color:#fff;font-style:italic;font-size:13px;text-shadow:1px 1px 2px #000}
-/* LOGIN */
-#login{position:fixed;top:0;left:0;width:100%;height:100%;z-index:90;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-#login h2{color:var(--gold);font-size:28px;margin-bottom:20px;letter-spacing:3px}
-#login select,#login input{width:100%;max-width:360px;padding:14px;margin:8px 0;background:#111;border:2px solid var(--green);color:var(--green);border-radius:8px;font-size:16px}
-#login button{width:100%;max-width:360px;padding:14px;background:var(--green);color:#000;border:none;font-weight:900;font-size:18px;border-radius:8px;margin-top:12px;cursor:pointer}
-/* APP */
-#app{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column}
-.topbar{height:48px;background:#001a00;border-bottom:2px solid var(--green);display:flex;align-items:center;gap:6px;padding:0 8px;z-index:1000}
-.topbar input{flex:1;background:#000;border:1px solid var(--green);color:var(--green);padding:7px;border-radius:5px;font-size:13px}
-.btn{padding:6px 10px;border-radius:5px;border:1px solid var(--green);background:#111;color:var(--green);font-weight:700;font-size:11px;cursor:pointer}
-.btn.active{background:var(--green);color:#000}
-.btn-go{background:var(--green);color:#000;border:none;font-weight:900}
-.perim{height:32px;background:#000;border-bottom:1px solid #333;display:flex;align-items:center;gap:10px;padding:0 10px;font-size:11px;font-weight:700}
+#landing{position:fixed;inset:0;z-index:100;background:#000 url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200') center/cover}
+#landing::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.lbox{position:relative;z-index:2;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.lbox h1{font-size:clamp(3rem,10vw,6rem);color:#d0d0d0;letter-spacing:10px;font-weight:900;text-shadow:3px 3px 6px #000}
+.sub{background:rgba(0,0,0,0.7);color:#fff;padding:6px 16px;border-radius:20px;margin:6px 0;font-size:14px;letter-spacing:2px;font-weight:700}
+.goldline{width:320px;height:4px;background:var(--gold);margin:12px 0;box-shadow:0 0 12px var(--gold)}
+.creator{color:var(--gold);letter-spacing:3px;font-size:14px}
+.name{color:var(--gold);font-size:clamp(2rem,6vw,3rem);font-weight:900;text-shadow:0 0 15px var(--gold)}
+.rank{color:#fff;font-size:13px;margin-bottom:20px}
+.btnEnter{background:#16a34a;color:#fff;border:3px solid #fff;padding:14px 60px;border-radius:50px;font-size:26px;font-weight:900;cursor:pointer;box-shadow:0 0 20px #16a34a}
+.qr{position:absolute;bottom:20px;left:20px;background:#fff;padding:6px;border-radius:8px;z-index:3;text-align:center}
+.qr img{width:90px;height:90px;display:block}
+.qr span{color:#000;font-size:9px;font-weight:900;display:block;margin-top:4px}
+.respect{margin-top:12px;color:#fff;font-style:italic;font-size:12px}
+#login{position:fixed;inset:0;z-index:90;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#login h2{color:var(--gold);letter-spacing:4px;margin-bottom:15px}
+#login select,#login input{width:100%;max-width:380px;padding:14px;margin:7px 0;background:#111;border:2px solid var(--g);color:var(--g);border-radius:8px;font-size:15px}
+#login button{width:100%;max-width:380px;padding:15px;background:var(--g);color:#000;font-weight:900;font-size:18px;border:none;border-radius:8px;margin-top:10px;cursor:pointer}
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+.topbar{height:46px;background:#001a00;border-bottom:2px solid var(--g);display:flex;gap:5px;align-items:center;padding:0 6px;z-index:1000}
+.topbar input{flex:1;background:#000;border:1px solid var(--g);color:var(--g);padding:6px;border-radius:5px;font-size:12px}
+.b{padding:5px 8px;border:1px solid var(--g);background:#111;color:var(--g);font-size:10px;font-weight:800;border-radius:5px;cursor:pointer}
+.b.active{background:var(--g);color:#000}
+.bgo{background:var(--g);color:#000;font-weight:900;border:none}
+.perim{height:30px;background:#000;border-bottom:1px solid #333;display:flex;gap:8px;align-items:center;padding:0 8px;font-size:10px;font-weight:800}
 .perim input{flex:1}
-#map{flex:1;width:100%;background:#111}
-#map.nvg{filter:invert(1) hue-rotate(90deg) saturate(3) brightness(0.9) !important}
-.bottom{height:70px;background:#001a00;border-top:2px solid var(--green);display:flex;overflow-x:auto;gap:6px;padding:6px;align-items:center}
-.bottom::-webkit-scrollbar{height:4px}
-.bbtn{flex-shrink:0;min-width:68px;height:54px;background:#000;border:1px solid var(--green);color:var(--green);border-radius:8px;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px}
-.bbtn.active{background:var(--green);color:#000}
-.bbtn.down{background:red !important;color:#fff !important;border-color:#fff !important;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
-#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#001a00;border:1px solid var(--green);color:var(--green);padding:10px 20px;border-radius:8px;font-weight:800;z-index:5000;display:none}
-/* MODALS */
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:4000;display:flex;align-items:center;justify-content:center;padding:15px}
-.box{background:#001a00;border:2px solid var(--green);border-radius:12px;padding:18px;width:100%;max-width:420px;color:var(--green)}
-.box h3{color:var(--gold);text-align:center;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.gbtn{background:#000;border:1px solid var(--green);color:var(--green);padding:12px 0;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer}
-/* DOTS */
-.leaflet-tooltip{background:rgba(0,0,0,0.85) !important;border:1px solid var(--green) !important;color:var(--green) !important;font-weight:800 !important;font-size:11px !important;border-radius:6px !important}
+#map{flex:1;background:#111}
+#map.nvg{filter:invert(1) hue-rotate(90deg) saturate(3) brightness(0.9)}
+.bottom{height:68px;background:#001a00;border-top:2px solid var(--g);display:flex;gap:5px;overflow-x:auto;padding:5px;align-items:center}
+.bb{flex-shrink:0;min-width:64px;height:54px;background:#000;border:1px solid var(--g);color:var(--g);border-radius:8px;font-size:9px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.bb.active{background:var(--g);color:#000}
+.bb.down{background:red !important;color:#fff !important;border-color:#fff !important;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+#roster{position:fixed;top:80px;right:8px;z-index:1200;background:rgba(0,0,0,0.85);border:1px solid var(--g);border-radius:8px;padding:6px;max-height:40vh;overflow-y:auto;min-width:160px;font-size:10px}
+#roster h4{color:var(--gold);font-size:10px;text-align:center;margin-bottom:4px}
+.rItem{padding:3px 4px;border-bottom:1px dotted #333;display:flex;gap:5px;align-items:center}
+.dotSm{width:8px;height:8px;border-radius:50%;display:inline-block}
+#toast{position:fixed;top:15px;left:50%;transform:translateX(-50%);background:#001a00;border:1px solid var(--g);color:var(--g);padding:8px 16px;border-radius:6px;font-weight:800;z-index:5000;display:none;font-size:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:4000;display:flex;align-items:center;justify-content:center;padding:12px}
+.box{background:#001a00;border:2px solid var(--g);border-radius:10px;padding:16px;width:100%;max-width:420px;color:var(--g)}
+.box h3{color:var(--gold);text-align:center;margin-bottom:10px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gbtn{background:#000;border:1px solid var(--g);color:var(--g);padding:10px 0;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer}
 .flash{width:18px;height:18px;position:relative}
-.dot{width:10px;height:10px;border-radius:50%;border:2px solid #000;position:absolute;top:4px;left:4px;box-shadow:0 0 8px currentColor}
+.dotC{width:10px;height:10px;border-radius:50%;border:2px solid #000;position:absolute;top:4px;left:4px}
 .ring{width:18px;height:18px;border-radius:50%;position:absolute;top:0;left:0;animation:ping 1.5s infinite}
-@keyframes ping{0%{transform:scale(0.5);opacity:1}100%{transform:scale(2.5);opacity:0}}
-#downAlert{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,0,0,0.93);z-index:9000;display:none;align-items:center;justify-content:center;text-align:center}
-.downBox{background:#000;border:4px solid #fff;padding:30px;border-radius:12px;max-width:90%}
-.downBox h1{color:red;font-size:32px}
-.downBox h2{color:#fff;font-size:24px;margin:10px 0}
-.ack{margin-top:15px;padding:12px 30px;background:#fff;color:red;font-weight:900;border:none;border-radius:6px;font-size:16px;cursor:pointer}
-/* TRACE PULSE */
-.trace{width:300px;height:300px;border-radius:50%;border:2px solid rgba(255,0,0,0.8);background:rgba(255,0,0,0.08);position:relative}
-.sweep{position:absolute;top:0;left:50%;width:50%;height:100%;background:linear-gradient(90deg,rgba(255,0,0,0.4),transparent);transform-origin:left center;animation:spin 2s linear infinite}
-@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(2.5);opacity:0}}
+#downA{position:fixed;inset:0;background:rgba(255,0,0,0.93);z-index:9000;display:none;align-items:center;justify-content:center}
+.downB{background:#000;border:4px solid #fff;padding:25px;border-radius:10px;text-align:center;max-width:90%}
+.ack{margin-top:12px;padding:10px 25px;background:#fff;color:red;font-weight:900;border:none;border-radius:6px;cursor:pointer}
+#reportM{background:rgba(0,0,0,0.92)}
+#reportA{background:#f5f5f5;color:#000;padding:30px;font-family:'Times New Roman',serif;width:100%;max-width:800px;margin:20px auto;border:1px solid #ccc;max-height:90vh;overflow-y:auto}
+.rHead{text-align:center;background:linear-gradient(135deg,#002f6c,#004e92);color:#fff !important;padding:20px;margin:-30px -30px 20px -30px;border-bottom:5px solid var(--gold)}
+.rHead h1{font-size:36px;letter-spacing:6px}
+.rHead h2{color:var(--gold) !important;font-size:14px}
+.sec{border:1px solid #ccc;border-radius:4px;margin-bottom:14px;background:#fff}
+.secT{background:#002f6c;color:#fff !important;padding:6px 10px;font-weight:800;font-size:12px;border-bottom:3px solid var(--gold)}
+.secB{padding:12px}
+.secB input,.secB textarea{width:100%;border:1px solid #ddd;padding:6px;font-size:13px;font-family:serif}
+.log{background:#f9f9f9;border:1px solid #ddd;max-height:150px;overflow-y:auto;font-size:11px;font-family:monospace;padding:6px}
+.noPrint{text-align:center;margin-top:14px}
+.noPrint button{padding:10px 18px;margin:4px;border:none;border-radius:5px;font-weight:800;cursor:pointer}
+.btnP{background:#002f6c;color:#fff}
+.btnE{background:var(--gold);color:#000}
 </style>
 </head>
 <body>
 <div id="landing">
-<div class="landing-box">
+<div class="lbox">
 <h1>TACNET</h1>
-<div class="sub1">MULTI-AGENCY-TASK-FORCE-SEARCH-APP</div>
-<div class="sub2">USA'S FIRST MULTI-AGENCY APP BUILT BY LAW ENFORCEMENT FOR LAW ENFORCEMENT</div>
+<div class="sub">MULTI-AGENCY-TASK-FORCE-SEARCH-APP</div>
+<div class="sub" style="font-size:11px">USA'S FIRST MULTI-AGENCY APP BUILT BY LAW ENFORCEMENT FOR LAW ENFORCEMENT</div>
 <div class="goldline"></div>
 <div class="creator">APP CREATOR</div>
 <div class="name">EARL WOOD</div>
 <div class="rank">DEPUTY SHERIFF RETIRED VIRGINIA</div>
-<button class="btn-enter" onclick="enterApp()">🛡️ ENTER</button>
+<button class="btnEnter" onclick="enter()">🛡️ ENTER</button>
 <div class="respect">WITH RESPECT TO ALL LAW ENFORCEMENT</div>
 </div>
+<div class="qr"><img id="qrImg" src="" alt="QR"><span>SCAN TO JOIN<br>LIVE MAP</span></div>
 </div>
 
 <div id="login" class="hidden">
 <h2>TACNET LOGIN</h2>
-<select id="role"><option value="searcher">Searcher / Officer</option><option value="commander">Commander</option><option value="admin">Admin (Earl Wood)</option></select>
-<input id="lName" placeholder="Your Name">
-<input id="lDept" placeholder="Department">
-<input id="lCode" class="hidden" type="password" placeholder="Access Code">
-<button onclick="doLogin()">LOG IN & JOIN LIVE MAP</button>
-<div id="fbStat" style="margin-top:12px;font-size:11px;color:#888">FIREBASE: CONNECTING...</div>
+<select id="roleSel"><option value="LE">Law Enforcement</option><option value="K9">K9 Team</option><option value="SAR">SAR / Search</option><option value="FIRE">Fire / EMS</option><option value="CP">Command Post</option><option value="CIV">Civilian / Other</option></select>
+<input id="lName" placeholder="Your Full Name (shows on dot)">
+<input id="lDept" placeholder="Agency (VSP, AMHERST SO, K9, etc)">
+<input id="lCode" class="hidden" type="password" placeholder="Access Code 1041/1042">
+<button onclick="doLogin()">JOIN LIVE MAP - ALL SEE ALL</button>
+<div style="margin-top:10px;font-size:10px;color:#777;text-align:center;max-width:360px">Your dot color is AUTO from your role: LE=Blue, K9=Light Blue, SAR=Red, Fire=Orange, Command=Yellow, Other=Green. Everyone sees everyone live.</div>
 </div>
 
 <div id="app" class="hidden">
 <div class="topbar">
-<button class="btn" onclick="location.reload()">EXIT</button>
-<input id="addr" placeholder="Address..." value="Amherst, VA">
-<button class="btn btn-go" onclick="searchAddr()">GO</button>
-<button class="btn" id="b-str" onclick="setLayer('str')">STR</button>
-<button class="btn active" id="b-sat" onclick="setLayer('sat')">SAT</button>
-<button class="btn" id="b-ter" onclick="setLayer('ter')">TER</button>
-<button class="btn" id="b-nvg" onclick="toggleNVG()">NVG</button>
+<button class="b" onclick="location.reload()">EXIT</button>
+<input id="addr" placeholder="Address" value="Amherst, VA">
+<button class="b bgo" onclick="searchAddr()">GO</button>
+<button class="b" id="b-str" onclick="setLayer('str')">STR</button>
+<button class="b active" id="b-sat" onclick="setLayer('sat')">SAT</button>
+<button class="b" id="b-ter" onclick="setLayer('ter')">TER</button>
+<button class="b" id="b-nvg" onclick="toggleNVG()">NVG</button>
 </div>
-<div class="perim">
-<span>PERIMETER:</span>
-<input type="range" id="rng" min="100" max="5000" value="2500" oninput="setPerim(this.value)">
-<span id="rngV">2500 FT</span>
-<span id="liveC" style="color:gold;margin-left:auto">0 LIVE</span>
-</div>
+<div class="perim"><span>PERIM:</span><input type="range" id="rng" min="100" max="5000" value="2500" oninput="setPerim(this.value)"><span id="rngV">2500 FT</span><span id="liveC" style="color:var(--gold);margin-left:auto">0 LIVE</span></div>
 <div id="map"></div>
+<div id="roster"><h4>🔴 LIVE ROSTER</h4><div id="rosterList">No one yet</div></div>
 <div class="bottom">
-<button class="bbtn down" onclick="triggerDown()">🚨<br>DOWN</button>
-<button class="bbtn" id="bb-gps" onclick="toggleGPS()">📡<br>LIVE GPS</button>
-<button class="bbtn" id="bb-trace" onclick="toggleTrace()">📡<br>TRACE</button>
-<button class="bbtn" id="bb-red" onclick="toggleRed()">🔴<br>RED PEN</button>
-<button class="bbtn" onclick="eraseLast()">🧽<br>ERASE</button>
-<button class="bbtn" id="bb-lock" onclick="toggleLock()">🔒<br>LOCK</button>
-<button class="bbtn" onclick="openMarks()">📍<br>MARK</button>
-<button class="bbtn" onclick="clearAll()">🛑<br>CLEAR</button>
+<button class="bb down" onclick="triggerDown()">🚨<br>DOWN</button>
+<button class="bb" id="bb-gps" onclick="toggleGPS()">📡<br>GPS</button>
+<button class="bb" id="bb-trace" onclick="toggleTrace()">📱<br>DROP PING</button>
+<button class="bb" id="bb-red" onclick="toggleRed()">🔴<br>RED PEN</button>
+<button class="bb" onclick="eraseLast()">🧽<br>ERASE</button>
+<button class="bb" id="bb-lock" onclick="toggleLock()">🔒<br>LOCK</button>
+<button class="bb" onclick="openMarks()">📍<br>MARK</button>
+<button class="bb" onclick="openReport()">📄<br>REPORT</button>
+<button class="bb" onclick="openReplay()">⏺<br>REPLAY</button>
 </div>
 </div>
 
 <div id="markModal" class="modal hidden" onclick="if(event.target===this)this.classList.add('hidden')">
-<div class="box"><h3>PLACE UNIT - TAP MAP AFTER</h3>
-<div class="grid">
-<button class="gbtn" onclick="pick('LE')" style="border-color:blue;color:blue">🔵 LE<br>LAW</button>
-<button class="gbtn" onclick="pick('K9')" style="border-color:lightblue;color:lightblue">🔵 K9<br>TEAM</button>
-<button class="gbtn" onclick="pick('SAR')" style="border-color:red;color:red">🔴 SAR<br>SEARCH</button>
-<button class="gbtn" onclick="pick('CIV')" style="border-color:#00ff41;color:#00ff41">🟢 CIV<br>CIVILIAN</button>
-<button class="gbtn" onclick="pick('ART')" style="border-color:orange;color:orange">🟠 ART<br>ARTICLE</button>
-<button class="gbtn" onclick="pick('CP')" style="border-color:yellow;color:yellow">🟡 CMD<br>POST</button>
-<button class="gbtn" onclick="pick('DRN')" style="border-color:gray;color:gray">⚪ DRN<br>DRONE</button>
-<button class="gbtn" onclick="pick('SUS')" style="border-color:purple;color:purple">🟣 SUS<br>SUSPECT</button>
-<button class="gbtn" onclick="pick('VEH')" style="border-color:#fff;color:#fff">⚫ VEH<br>VEHICLE</button>
+<div class="box"><h3>TAP MAP TO PLACE UNIT</h3><div class="grid">
+<button class="gbtn" onclick="pick('LE')">🔵 LE</button><button class="gbtn" onclick="pick('K9')">🔵 K9</button><button class="gbtn" onclick="pick('SAR')">🔴 SAR</button>
+<button class="gbtn" onclick="pick('CIV')">🟢 CIV</button><button class="gbtn" onclick="pick('ART')">🟠 ARTICLE</button><button class="gbtn" onclick="pick('CP')">🟡 CMD POST</button>
+<button class="gbtn" onclick="pick('DRN')">⚪ DRONE</button><button class="gbtn" onclick="pick('SUS')">🟣 SUSPECT</button><button class="gbtn" onclick="pick('VEH')">⚫ VEHICLE</button>
 </div></div>
 </div>
 
-<div id="downAlert"><div class="downBox"><h1>🚨 OFFICER DOWN 🚨</h1><h2 id="dName">UNKNOWN</h2><p id="dDept" style="color:gold"></p><p id="dGps" style="color:#00ff41"></p><button class="ack" onclick="closeDown()">ACKNOWLEDGE - RESPONDING</button></div></div>
+<div id="downA"><div class="downB"><h1 style="color:red;font-size:30px">🚨 OFFICER DOWN 🚨</h1><h2 id="dName" style="color:#fff;margin:8px 0">UNKNOWN</h2><p id="dDept" style="color:gold"></p><p id="dGps" style="color:#00ff41"></p><button class="ack" onclick="closeDown()">ACKNOWLEDGE - RESPONDING</button></div></div>
+
+<div id="replayM" class="modal hidden"><div class="box" style="max-width:500px"><h3>SEARCH REPLAY LOG</h3><div id="replayLog" style="background:#000;border:1px solid var(--g);padding:8px;max-height:50vh;overflow-y:auto;font-size:11px"></div><div style="display:flex;gap:6px;margin-top:10px"><button class="b" style="flex:1" onclick="printReplay()">PRINT</button><button class="b" style="flex:1" onclick="emailReplay()">EMAIL</button><button class="b" style="flex:1" onclick="document.getElementById('replayM').classList.add('hidden')">CLOSE</button></div></div></div>
+
+<div id="reportM" class="modal hidden"><div id="reportA">
+<div class="rHead"><h1>TACNET</h1><h2>Federal State Local Law Enforcement Final Report</h2><p style="font-size:10px;color:#b0c4de">Multi-Agency Task Force Search App - Created by Earl Wood</p></div>
+<div class="sec"><div class="secT">Incident Details</div><div class="secB">
+<div><label style="font-size:10px;font-weight:800">Date / Time</label><input id="repDate"></div>
+<div><label style="font-size:10px;font-weight:800">Location / Target</label><input id="repLoc"></div>
+<div><label style="font-size:10px;font-weight:800">Incident Type</label><input id="repInc" value="Manhunt / Fugitive Search"></div>
+<div><label style="font-size:10px;font-weight:800">Disposition</label><input id="repDisp" placeholder="Apprehended / Still At Large / Closed"></div>
+</div></div>
+<div class="sec"><div class="secT">Narrative & Notes</div><div class="secB"><textarea id="repNotes" rows="4" placeholder="Enter detailed narrative..."></textarea></div></div>
+<div class="sec"><div class="secT">Live Roster - Who Was On Map (Auto)</div><div class="secB"><div id="repRoster" class="log"></div></div></div>
+<div class="sec"><div class="secT">Itemized Search Log (For Court)</div><div class="secB"><div id="repLog" class="log"></div></div></div>
+<div style="text-align:center;margin-top:40px"><div style="border-top:1px solid #000;width:280px;margin:0 auto;padding-top:5px;font-size:11px;font-weight:800">Commander Signature - Earl Wood</div></div>
+<div class="noPrint"><button class="btnP" onclick="window.print()">🖨 PRINT / SAVE PDF</button><button class="btnE" onclick="emailReport()">✉ EMAIL REPORT</button><button class="b" onclick="document.getElementById('reportM').classList.add('hidden')">BACK</button></div>
+</div></div>
+
 <div id="toast"></div>
 
 <script>
 const firebaseConfig={apiKey:"AIzaSyDFzxwNI8eLhjlsZQf_sKpboe_zqLkNZfg",authDomain:"tacnet-law-enforcement.firebaseapp.com",databaseURL:"https://tacnet-law-enforcement-default-rtdb.firebaseio.com",projectId:"tacnet-law-enforcement",storageBucket:"tacnet-law-enforcement.firebasestorage.app",messagingSenderId:"85046927848",appId:"1:85046927848:web:8ebe08d72b9d252e50445d"};
-let fb=null,map,layer,perimC=[37.5896,-79.0513],perimCircle,redDot,activeMark=null,redPen=false,isLock=false,isDrawing=false,curLine=null,drawLayers=[],userM=null,watch=null,myId='u-'+Math.random().toString(36).substr(2,6),other={},traceOn=false,traceInt=null,radar=null;
-let myName='OFFICER',myDept='AMHERST';
-const colors={LE:'blue',K9:'#00bfff',SAR:'red',CIV:'#00ff41',ART:'orange',CP:'yellow',DRN:'gray',SUS:'purple',VEH:'black'};
-
-try{firebase.initializeApp(firebaseConfig);fb=firebase.database();document.getElementById('fbStat').innerText='FIREBASE: CONNECTED '+myId;}catch(e){document.getElementById('fbStat').innerText='FIREBASE ERROR '+e.message;}
-
-function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3000);}
-function enterApp(){document.getElementById('landing').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
-document.getElementById('role').addEventListener('change',e=>{document.getElementById('lCode').classList.toggle('hidden',e.target.value==='searcher');});
+let fb=null,map,layer,perimC=[37.5896,-79.0513],perimCircle,redDot,activeMark=null,redPen=false,isLock=false,isDrawing=false,curLine=null,drawLayers=[],userM=null,watch=null,myId='u-'+Math.random().toString(36).substr(2,6),other={},radar=null,traceOn=false,traceInt=null;
+let myName='OFFICER',myDept='AMHERST',myRole='LE',myColor='blue',sLog=[];
+const roleColors={LE:'blue',K9:'#00bfff',SAR:'red',FIRE:'orange',CP:'yellow',CIV:'#00ff41'};
+try{firebase.initializeApp(firebaseConfig);fb=firebase.database();}catch(e){}
+function toast(m){let t=document.getElementById('toast');t.innerText=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);}
+function logA(a,d){sLog.push({time:new Date().toLocaleString(),action:a,detail:d});}
+function enter(){document.getElementById('landing').classList.add('hidden');document.getElementById('login').classList.remove('hidden');}
+window.addEventListener('load',()=>{
+let url=window.location.href.split('?')[0];
+document.getElementById('qrImg').src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+encodeURIComponent(url);
+});
+document.getElementById('roleSel').addEventListener('change',e=>{let v=e.target.value;document.getElementById('lCode').classList.toggle('hidden',v!=='CP'&&v!=='LE');});
 function doLogin(){
-let r=document.getElementById('role').value,c=document.getElementById('lCode').value;
-if(r==='admin'&&c!=='1041'){alert('BAD ADMIN CODE');return;}
-if(r==='commander'&&c!=='1042'){alert('BAD COMMANDER CODE');return;}
-myName=document.getElementById('lName').value||'OFFICER-'+myId.substr(-3);
-myDept=document.getElementById('lDept').value||'AMHERST';
+myRole=document.getElementById('roleSel').value;
+let code=document.getElementById('lCode').value;
+if((myRole==='CP'||myRole==='LE') && document.getElementById('lDept').value.toUpperCase().includes('ADMIN')){
+if(code!=='1041' && code!=='1042'){alert('BAD CODE');return;}
+}
+myName=(document.getElementById('lName').value||'OFFICER').toUpperCase();
+myDept=(document.getElementById('lDept').value||'AMHERST').toUpperCase();
+myColor=roleColors[myRole]||'#00ff41';
 document.getElementById('login').classList.add('hidden');
 document.getElementById('app').classList.remove('hidden');
-setTimeout(initMap,120);
+setTimeout(initMap,150);
+logA('LOGIN', myName+' - '+myDept+' as '+myRole);
 }
 function initMap(){
-map=L.map('map',{zoomControl:false,maxZoom:22}).setView(perimC,15);
+map=L.map('map',{zoomControl:false,maxZoom:22}).setView(perimC,14);
 L.control.zoom({position:'topright'}).addTo(map);
 layer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map);
 drawPerim(2500);
 setupDraw();
 if(fb){
 fb.ref('officers').on('value',s=>{
-let d=s.val()||{};document.getElementById('liveC').innerText=Object.keys(d).length+' LIVE';
-for(let id in other){if(!d[id]){map.removeLayer(other[id]);delete other[id];}}
-for(let id in d){if(id===myId)continue;let o=d[id];if(!o.lat)continue;
+let d=s.val()||{};
+let count=Object.keys(d).length;
+document.getElementById('liveC').innerText=count+' LIVE';
+let html='';
+for(let id in d){
+let o=d[id];
+let col=roleColors[o.role]||'#00ff41';
+html+=`<div class="rItem"><span class="dotSm" style="background:${col}"></span> ${o.name} - ${o.dept}</div>`;
+if(id===myId)continue;
 if(other[id]){other[id].setLatLng([o.lat,o.lng]);other[id].getTooltip().setContent(o.name+' - '+o.dept);}
 else{
-let col=o.dept==='VSP'?'blue':(o.name.includes('K9')?'#00bfff':'#00ff41');
-let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}66"></div><div class="dot" style="background:${col}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
+let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}88"></div><div class="dotC" style="background:${col}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
 other[id]=L.marker([o.lat,o.lng],{icon:ic}).addTo(map);
 other[id].bindTooltip(o.name+' - '+o.dept,{permanent:true,direction:'top'});
-if(!other[id]._notified){toast('OFFICER JOINED: '+o.name);other[id]._notified=true;}
-}}
+}
+}
+if(!count)html='No one yet';
+document.getElementById('rosterList').innerHTML=html;
+document.getElementById('repRoster').innerHTML=html.replace(/<[^>]+>/g,' ').replace(/\s+/g,'<br>');
+for(let id in other){if(!d[id]){map.removeLayer(other[id]);delete other[id];}}
 });
-fb.ref('.info/connected').on('value',snap=>{if(snap.val()){fb.ref('officers/'+myId).onDisconnect().remove();}});
+fb.ref('.info/connected').on('value',snap=>{if(snap.val()&&fb)fb.ref('officers/'+myId).onDisconnect().remove();});
 fb.ref('down').on('value',snap=>{
-let v=snap.val();if(!v)return;
-if(Date.now()-v.ts>120000)return;
+let v=snap.val();if(!v||Date.now()-v.ts>120000)return;
 document.getElementById('dName').innerText=v.name;
-document.getElementById('dDept').innerText='DEPT: '+v.dept;
+document.getElementById('dDept').innerText='DEPT: '+v.dept+' ('+v.role+')';
 document.getElementById('dGps').innerText='GPS: '+v.lat.toFixed(5)+','+v.lng.toFixed(5);
-document.getElementById('downAlert').style.display='flex';
-if(navigator.vibrate)navigator.vibrate([500,200,500,200,1000]);
+document.getElementById('downA').style.display='flex';
+if(navigator.vibrate)navigator.vibrate([600,200,600,200,1000]);
 if(v.id!==myId)toast('🚨 OFFICER DOWN: '+v.name);
 });
 fb.ref('pings').on('child_added',snap=>{
 let p=snap.val();if(!p||Date.now()-p.ts>300000)return;
-let m=L.circleMarker([p.lat,p.lng],{radius:12,fillColor:'orange',color:'red',fillOpacity:0.9,weight:3}).addTo(map);
-m.bindTooltip('📱 TOWER PING: '+p.lat.toFixed(4),{permanent:true});
-setTimeout(()=>map.removeLayer(m),60000);
+let m=L.circleMarker([p.lat,p.lng],{radius:13,fillColor:'orange',color:'red',fillOpacity:0.95,weight:3}).addTo(map);
+m.bindTooltip('📱 PING: '+p.by,{permanent:true});
+setTimeout(()=>map.removeLayer(m),90000);
+if(p.id!==myId){map.setView([p.lat,p.lng],16);toast('📱 PING DROPPED BY '+p.by);}
 });
-toast('TACNET LIVE - TAP LIVE GPS');
-}else{toast('OFFLINE MODE');}
+toast('TACNET LIVE - TAP GPS TO GO LIVE - YOU WILL BE '+myColor.toUpperCase());
+}else toast('OFFLINE MODE');
 map.on('click',e=>{
 if(isLock)return;
 if(activeMark){
-let col=colors[activeMark]||'blue';
+let col={LE:'blue',K9:'#00bfff',SAR:'red',CIV:'#00ff41',ART:'orange',CP:'yellow',DRN:'gray',SUS:'purple',VEH:'black'}[activeMark]||'blue';
 let mk=L.circleMarker(e.latlng,{radius:11,fillColor:col,color:'#fff',weight:2,fillOpacity:1}).addTo(map);
-mk.bindTooltip(activeMark+' - '+myName,{permanent:true,direction:'top'});
+mk.bindTooltip(activeMark+' - '+myName,{permanent:true});
 mk.on('click',()=>map.removeLayer(mk));
-if(fb)fb.ref('markers/'+Date.now()).set({type:activeMark,lat:e.latlng.lat,lng:e.latlng.lng,by:myName});
-activeMark=null;toast(activeMark+' PLACED');}
+logA('MARK', activeMark+' at '+e.latlng.lat.toFixed(5));
+activeMark=null;
+}
 });
 }
-function drawPerim(ft){
-if(perimCircle)map.removeLayer(perimCircle);
-if(redDot)map.removeLayer(redDot);
-perimCircle=L.circle(perimC,{radius:ft/3.28084,color:'#39ff14',fillColor:'#39ff14',fillOpacity:0.08,weight:3,dashArray:'8,8'}).addTo(map);
-redDot=L.circleMarker(perimC,{radius:6,fillColor:'red',color:'red',fillOpacity:1}).addTo(map);
-}
+function drawPerim(ft){if(perimCircle)map.removeLayer(perimCircle);if(redDot)map.removeLayer(redDot);
+perimCircle=L.circle(perimC,{radius:ft/3.28084,color:'#39ff14',fillColor:'#39ff14',fillOpacity:0.06,weight:3,dashArray:'8,8'}).addTo(map);
+redDot=L.circleMarker(perimC,{radius:5,fillColor:'red',color:'red',fillOpacity:1}).addTo(map);}
 function setPerim(v){document.getElementById('rngV').innerText=v+' FT';drawPerim(parseFloat(v));}
-function searchAddr(){let q=document.getElementById('addr').value;fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>{if(d[0]){perimC=[parseFloat(d[0].lat),parseFloat(d[0].lon)];map.setView(perimC,16);drawPerim(document.getElementById('rng').value);toast('TARGET LOCKED');}});}
-function setLayer(t){
-map.removeLayer(layer);
-document.querySelectorAll('#app .topbar .btn').forEach(b=>b.classList.remove('active'));
+function searchAddr(){let q=document.getElementById('addr').value;fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>{if(d[0]){perimC=[+d[0].lat,+d[0].lon];map.setView(perimC,15);drawPerim(document.getElementById('rng').value);}});}
+function setLayer(t){map.removeLayer(layer);document.querySelectorAll('.topbar .b').forEach(x=>x.classList.remove('active'));
 if(t==='str'){layer=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:22}).addTo(map);document.getElementById('b-str').classList.add('active');}
 if(t==='sat'){layer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map);document.getElementById('b-sat').classList.add('active');}
 if(t==='ter'){layer=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:22}).addTo(map);document.getElementById('b-ter').classList.add('active');}
 }
-function toggleNVG(){document.getElementById('map').classList.toggle('nvg');document.getElementById('b-nvg').classList.toggle('active');toast(document.getElementById('map').classList.contains('nvg')?'NVG ON':'NVG OFF');}
+function toggleNVG(){document.getElementById('map').classList.toggle('nvg');document.getElementById('b-nvg').classList.toggle('active');}
 function openMarks(){document.getElementById('markModal').classList.remove('hidden');}
 function pick(t){activeMark=t;document.getElementById('markModal').classList.add('hidden');toast('TAP MAP TO DROP '+t);}
 function setupDraw(){
-let c=map.getContainer();
+let c=map?map.getContainer():null;if(!c)return;
 function pt(e){let x=e.clientX||(e.touches&&e.touches[0].clientX),y=e.clientY||(e.touches&&e.touches[0].clientY);let r=c.getBoundingClientRect();return map.containerPointToLatLng([x-r.left,y-r.top]);}
-c.addEventListener('mousedown',e=>{if(!redPen||isLock)return;e.preventDefault();isDrawing=true;curLine=L.polyline([pt(e)],{color:'red',weight:4}).addTo(map);drawLayers.push(curLine);});
+c.addEventListener('mousedown',e=>{if(!redPen||isLock)return;isDrawing=true;curLine=L.polyline([pt(e)],{color:'red',weight:4}).addTo(map);drawLayers.push(curLine);});
 c.addEventListener('mousemove',e=>{if(!isDrawing||!redPen)return;curLine.addLatLng(pt(e));});
-window.addEventListener('mouseup',()=>{isDrawing=false;});
+window.addEventListener('mouseup',()=>isDrawing=false);
 c.addEventListener('touchstart',e=>{if(!redPen||isLock)return;e.preventDefault();isDrawing=true;curLine=L.polyline([pt(e)],{color:'red',weight:4}).addTo(map);drawLayers.push(curLine);},{passive:false});
 c.addEventListener('touchmove',e=>{if(!isDrawing||!redPen)return;e.preventDefault();curLine.addLatLng(pt(e));},{passive:false});
-window.addEventListener('touchend',()=>{isDrawing=false;});
+window.addEventListener('touchend',()=>isDrawing=false);
 }
-function toggleRed(){
-redPen=!redPen;
-document.getElementById('bb-red').classList.toggle('active',redPen);
-if(redPen){toast('🔴 RED PEN ON - DRAW ARROWS/NOTES - TAP MAP AND DRAG');if(isLock)toggleLock();map.dragging.disable();}
-else{toast('RED PEN OFF');if(!isLock)map.dragging.enable();}
-}
-function eraseLast(){if(drawLayers.length){let l=drawLayers.pop();map.removeLayer(l);toast('ERASED');}else{toast('NOTHING TO ERASE');}}
+function toggleRed(){redPen=!redPen;document.getElementById('bb-red').classList.toggle('active',redPen);
+if(redPen){if(isLock)toggleLock();map.dragging.disable();toast('🔴 RED PEN ON - DRAW ARROWS');}else{if(!isLock)map.dragging.enable();toast('RED PEN OFF');}}
+function eraseLast(){if(drawLayers.length){map.removeLayer(drawLayers.pop());toast('ERASED');}else toast('NOTHING');}
 function toggleLock(){isLock=!isLock;document.getElementById('bb-lock').classList.toggle('active',isLock);
-if(isLock){map.dragging.disable();map.touchZoom.disable();map.doubleClickZoom.disable();toast('MAP LOCKED - SAFE TO DRAW');}
-else{map.dragging.enable();map.touchZoom.enable();map.doubleClickZoom.enable();toast('MAP UNLOCKED');}
-}
-function clearAll(){map.eachLayer(l=>{if(l instanceof L.CircleMarker && l!==redDot)map.removeLayer(l);if(l instanceof L.Marker && l!==userM && !Object.values(other).includes(l))map.removeLayer(l);});drawLayers.forEach(l=>{try{map.removeLayer(l);}catch{}});drawLayers=[];toast('MAP CLEARED');}
+if(isLock){map.dragging.disable();map.touchZoom.disable();toast('LOCKED');}else{map.dragging.enable();map.touchZoom.enable();toast('UNLOCKED');}}
 function toggleGPS(){
 let b=document.getElementById('bb-gps');
 if(watch!==null){navigator.geolocation.clearWatch(watch);watch=null;b.classList.remove('active');if(fb)fb.ref('officers/'+myId).remove();if(userM){map.removeLayer(userM);userM=null;}toast('GPS OFF');return;}
-if(!navigator.geolocation){toast('NO GPS');return;}
-b.classList.add('active');toast('TURNING ON LIVE GPS...');
+b.classList.add('active');toast('GPS ACQUIRING...');
 watch=navigator.geolocation.watchPosition(p=>{
 let ll=[p.coords.latitude,p.coords.longitude];
 if(!userM){
-let ic=L.divIcon({className:'flash',html:'<div class="ring" style="background:rgba(0,255,255,0.5)"></div><div class="dot" style="background:#00ffff"></div>',iconSize:[18,18],iconAnchor:[9,9]});
+let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${myColor}88"></div><div class="dotC" style="background:${myColor}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
 userM=L.marker(ll,{icon:ic}).addTo(map);
-userM.bindTooltip('YOU - '+myName,{permanent:true,direction:'top'});
+userM.bindTooltip('YOU - '+myName+' - '+myDept,{permanent:true});
 map.setView(ll,18);
-toast('GPS LOCKED - YOU ARE LIVE');
-}else{userM.setLatLng(ll);}
-if(fb)fb.ref('officers/'+myId).set({name:myName,dept:myDept,lat:p.coords.latitude,lng:p.coords.longitude,timestamp:Date.now()});
-},e=>{if(e.code===1){toast('ALLOW LOCATION IN SETTINGS');b.classList.remove('active');}},{enableHighAccuracy:true,maximumAge:0,timeout:60000});
+}else userM.setLatLng(ll);
+if(fb)fb.ref('officers/'+myId).set({name:myName,dept:myDept,role:myRole,lat:p.coords.latitude,lng:p.coords.longitude,timestamp:Date.now()});
+},e=>{if(e.code===1)toast('ALLOW LOCATION');b.classList.remove('active');},{enableHighAccuracy:true,maximumAge:0,timeout:60000});
 }
 function triggerDown(){
 let lat=perimC[0],lng=perimC[1];
 if(userM){let ll=userM.getLatLng();lat=ll.lat;lng=ll.lng;}
-if(fb)fb.ref('down').set({id:myId,name:myName,dept:myDept,lat:lat,lng:lng,ts:Date.now()});
-document.getElementById('dName').innerText=myName;
-document.getElementById('dDept').innerText='DEPT: '+myDept;
-document.getElementById('dGps').innerText='GPS: '+lat.toFixed(5)+','+lng.toFixed(5);
-document.getElementById('downAlert').style.display='flex';
+if(fb)fb.ref('down').set({id:myId,name:myName,dept:myDept,role:myRole,lat:lat,lng:lng,ts:Date.now()});
+logA('OFFICER DOWN', myName+' '+myDept+' at '+lat.toFixed(5));
 }
-function closeDown(){document.getElementById('downAlert').style.display='none';}
+function closeDown(){document.getElementById('downA').style.display='none';}
 function toggleTrace(){
 let b=document.getElementById('bb-trace');
-if(traceOn){clearInterval(traceInt);traceOn=false;b.classList.remove('active');if(radar)map.removeLayer(radar);radar=null;toast('TRACE OFF');return;}
-traceOn=true;b.classList.add('active');toast('📡 TRAP N TRACE SCANNING - CELL PING SEARCH ACTIVE');
-let ic=L.divIcon({className:'',html:'<div class="trace"><div class="sweep"></div></div>',iconSize:[300,300],iconAnchor:[150,150]});
-radar=L.marker(perimC,{icon:ic,interactive:false}).addTo(map);
-function doPing(){
-let lat=perimC[0]+(Math.random()-0.5)*0.008;
-let lng=perimC[1]+(Math.random()-0.5)*0.008;
-if(fb)fb.ref('pings/'+Date.now()).set({lat:lat,lng:lng,ts:Date.now(),by:myName});
+if(traceOn){clearInterval(traceInt);traceOn=false;b.classList.remove('active');if(radar)map.removeLayer(radar);radar=null;toast('PING DROP OFF');return;}
+traceOn=true;b.classList.add('active');toast('TAP MAP TO DROP REAL TOWER PING - ALL SEE IT');
+map.once('click',e=>{
+let lat=e.latlng.lat,lng=e.latlng.lng;
+if(fb)fb.ref('pings/'+Date.now()).set({id:myId,by:myName,lat:lat,lng:lng,ts:Date.now()});
 let m=L.circleMarker([lat,lng],{radius:14,fillColor:'orange',color:'red',weight:3,fillOpacity:1}).addTo(map);
-m.bindTooltip('📱 PING',{permanent:true});setTimeout(()=>map.removeLayer(m),15000);
-map.setView([lat,lng],16);toast('📡 PING HIT - FUGITIVE CELL DETECTED');
-if(navigator.vibrate)navigator.vibrate(600);
+m.bindTooltip('📱 PING: '+myName,{permanent:true});
+logA('PING DROP', myName+' dropped ping at '+lat.toFixed(5));
+traceOn=false;b.classList.remove('active');
+});
 }
-setTimeout(doPing,2000);
-traceInt=setInterval(doPing,12000);
+function openReplay(){
+document.getElementById('replayLog').innerHTML=sLog.map(x=>`<div>[${x.time}] ${x.action}: ${x.detail}</div>`).join('')||'No log';
+document.getElementById('replayM').classList.remove('hidden');
+}
+function printReplay(){let w=window.open('','_blank');w.document.write('<pre>'+document.getElementById('replayLog').innerText+'</pre>');w.print();}
+function emailReplay(){let t=sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');window.location.href='mailto:?subject=TACNET Replay&body='+encodeURIComponent(t);}
+function openReport(){
+document.getElementById('repDate').value=new Date().toLocaleString();
+document.getElementById('repLoc').value=document.getElementById('addr').value;
+document.getElementById('repLog').innerHTML=sLog.map(x=>`<div>[${x.time}] ${x.action}: ${x.detail}</div>`).join('');
+document.getElementById('reportM').classList.remove('hidden');
+}
+function emailReport(){
+let body=`TACNET FINAL REPORT\nDate: ${document.getElementById('repDate').value}\nLocation: ${document.getElementById('repLoc').value}\nType: ${document.getElementById('repInc').value}\nDisp: ${document.getElementById('repDisp').value}\nNotes: ${document.getElementById('repNotes').value}\n\nLOG:\n`+sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');
+window.location.href='mailto:?subject=TACNET Final Report&body='+encodeURIComponent(body);
 }
 </script>
 </body>
