@@ -1,1 +1,304 @@
-https:// — use the download button above, it's your complete file.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>TACNET - FIELD COMMAND MATRIX - FIXED</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        :root { --tac-green:#00ff41; --tac-bg:#000; --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px); }
+        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        html,body{margin:0;padding:0;width:100%;height:100%;position:fixed;top:0;left:0;overflow:hidden;background:var(--tac-bg);color:var(--tac-green);font-family:-apple-system,BlinkMacSystemFont,monospace;overscroll-behavior:none;}
+        .hidden{display:none !important;}
+        #landingPage{position:fixed;top:0;left:0;width:100%;height:100%;background-image:url('https://z-cdn-media.chatglm.cn/files/213950c0-fa62-4514-a330-4a20d77eda19.png?auth_key=1884670006-3fafcbd5cdc149f598dec1820b25b5cb-0-79e934ad0973fa576af177c445b09099');background-size:contain;background-position:center;background-repeat:no-repeat;background-color:#000;z-index:100;}
+        .qr-code{position:absolute;top:calc(15px + var(--safe-top));left:15px;width:70px;height:70px;background:white;padding:3px;border-radius:4px;}
+        .enter-text{position:absolute;top:calc(95px + var(--safe-top));left:15px;color:#00FF00;font-size:20px;font-weight:bold;text-shadow:0 0 15px #00FF00;cursor:pointer;border:2px solid #00FF00;padding:6px 20px;background:rgba(0,0,0,0.9);border-radius:4px;-webkit-appearance:none;appearance:none;z-index:200;touch-action:manipulation;}
+        #loginPage{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;padding-top:var(--safe-top);}
+        #loginPage h2{color:gold;margin-bottom:20px;text-align:center;}
+        #loginPage select,#loginPage input{width:90%;max-width:350px;padding:15px;margin:8px 0;border-radius:6px;border:1px solid var(--tac-green);background:#111;color:var(--tac-green);font-size:16px;}
+        #loginPage button{width:90%;max-width:350px;padding:15px;background:var(--tac-green);color:black;border:none;font-weight:bold;font-size:18px;border-radius:6px;cursor:pointer;margin-top:10px;}
+        .admin-btn{background:gold !important;color:black !important;}
+        #appContainer{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;}
+        .top-bar{position:fixed;top:var(--safe-top);left:0;right:0;height:44px;background:#001a00;border-bottom:2px solid var(--tac-green);padding:0 8px;display:flex;gap:5px;align-items:center;overflow:hidden;white-space:nowrap;z-index:1001;}
+        .top-bar input{flex-grow:1;background:black;color:var(--tac-green);border:1px solid var(--tac-green);padding:6px;border-radius:4px;font-size:12px;min-width:0;height:30px;}
+        .btn-go{background:var(--tac-green);color:black;border:none;padding:6px 10px;font-weight:bold;border-radius:4px;cursor:pointer;flex-shrink:0;height:30px;font-size:12px;}
+        .top-toggles{display:flex;gap:4px;flex-shrink:0;}
+        .btn-toggle{background:#111;color:var(--tac-green);border:1px solid var(--tac-green);padding:5px 6px;font-size:10px;font-weight:bold;border-radius:4px;cursor:pointer;touch-action:manipulation;height:30px;display:flex;align-items:center;}
+        .btn-toggle.active{background:var(--tac-green);color:black;}
+        .perimeter-slider{position:fixed;top:calc(44px + var(--safe-top));left:0;right:0;height:30px;background:#000;padding:0 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #333;overflow:hidden;z-index:1001;}
+        .perimeter-slider input[type="range"]{flex-grow:1;height:4px;}
+        .perimeter-slider span{font-size:11px;font-weight:bold;}
+        .map-wrapper{position:fixed;top:calc(74px + var(--safe-top));left:0;right:0;bottom:calc(64px + var(--safe-bottom));overflow:hidden;z-index:1000;}
+        #map{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#111;transition:filter 0.3s;touch-action:none;}
+        #map.nvg-active{filter:invert(1) hue-rotate(90deg) saturate(4) brightness(0.8);}
+        #map.locked-overlay::after{content:"SEARCH TERMINATED - EVIDENCE LOCKED";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(255,0,0,0.8);color:white;padding:20px;font-weight:bold;font-size:20px;z-index:9999;text-align:center;border:2px solid white;}
+        #toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(0,26,0,0.95);border:1px solid var(--tac-green);color:var(--tac-green);padding:10px 20px;border-radius:6px;font-size:14px;font-weight:bold;z-index:5000;display:none;pointer-events:none;}
+        #offlineInd{position:fixed;top:10px;left:50%;transform:translateX(-50%);background:red;color:white;padding:4px 12px;font-size:12px;font-weight:bold;border-radius:4px;z-index:500;display:none;}
+        .bottom-bar{position:fixed;bottom:0;left:0;right:0;height:64px;padding-bottom:var(--safe-bottom);background:#001a00;border-top:2px solid var(--tac-green);display:flex;padding-top:0;padding-left:5px;padding-right:5px;overflow-x:auto;gap:8px;scrollbar-width:thin;scrollbar-color:var(--tac-green) #000;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;z-index:1001;}
+        .btn-tac{background:black;color:var(--tac-green);border:1px solid var(--tac-green);padding:4px 10px;font-weight:bold;font-size:12px;border-radius:6px;cursor:pointer;white-space:nowrap;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:65px;scroll-snap-align:start;touch-action:manipulation;-webkit-user-select:none;user-select:none;}
+        .btn-tac.active{background:var(--tac-green);color:black;}
+        .btn-officer-down{background:red !important;color:white !important;border-color:white !important;animation:pulse 1.5s infinite;}
+        @keyframes pulse{0%{opacity:1;}50%{opacity:0.6;}100%{opacity:1;}}
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+        .modal-box{background:#001a00;border:2px solid var(--tac-green);border-radius:10px;padding:20px;width:100%;max-width:400px;color:var(--tac-green);}
+        .modal-box h3{margin-top:0;text-align:center;color:gold;}
+        .grid-items{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+        .grid-btn{background:black;border:1px solid var(--tac-green);color:var(--tac-green);padding:15px 0;border-radius:6px;font-size:12px;font-weight:bold;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;}
+        .grid-btn span{font-size:20px;}
+        .leaflet-tooltip{background:transparent !important;border:none !important;box-shadow:none !important;color:var(--tac-green) !important;font-weight:900;text-shadow:1px 1px 2px black;font-size:11px;}
+        .gps-flash-icon{position:relative;width:20px;height:20px;}
+        .gps-dot-center{position:absolute;top:5px;left:5px;width:10px;height:10px;background:#00ffff;border:2px solid #000;border-radius:50%;box-shadow:0 0 8px #00ffff;z-index:2;}
+        .gps-pulse-ring{position:absolute;top:0;left:0;width:20px;height:20px;background:rgba(0,255,255,0.4);border-radius:50%;animation:gps-pulse-anim 1.5s infinite;z-index:1;}
+        @keyframes gps-pulse-anim{0%{transform:scale(0.5);opacity:1;}100%{transform:scale(2.5);opacity:0;}}
+        #downAlert{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,0,0,0.9);z-index:9000;display:none;align-items:center;justify-content:center;text-align:center;animation:flash 0.5s infinite;}
+        .down-alert-content{background:black;border:4px solid white;padding:40px;border-radius:10px;max-width:90%;}
+        .down-alert-content h1{color:red;margin:0 0 10px 0;font-size:36px;}
+        .down-alert-content h2{color:white;margin:10px 0;font-size:28px;}
+        .down-alert-content p{color:#00ff41;margin:5px 0;font-size:16px;}
+        .ack-btn{margin-top:20px;padding:15px 30px;background:white;color:red;font-weight:bold;font-size:18px;border:none;border-radius:5px;cursor:pointer;touch-action:manipulation;}
+        @keyframes flash{0%{background:rgba(255,0,0,0.9);}50%{background:rgba(139,0,0,0.9);}100%{background:rgba(255,0,0,0.9);}}
+    </style>
+</head>
+<body>
+    <div id="landingPage">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=TACNET_ACCESS" class="qr-code" alt="QR">
+        <button class="enter-text" type="button" onclick="enterApp()">ENTER</button>
+    </div>
+    <div id="loginPage" class="hidden">
+        <h2>TACNET LOGIN</h2>
+        <select id="roleSelect" onchange="toggleAccessCode()">
+            <option value="searcher">Searcher / Officer</option>
+            <option value="commander">Commander</option>
+            <option value="admin">Admin (Earl Wood)</option>
+        </select>
+        <input type="text" id="loginName" placeholder="Name">
+        <input type="text" id="loginDept" placeholder="Department No.">
+        <input type="password" id="accessCode" class="hidden" placeholder="Access Code">
+        <button onclick="attemptLogin()">LOG IN</button>
+        <div id="firebaseStatus" style="margin-top:15px;font-size:11px;color:#888;">FIREBASE: INITIALIZING...</div>
+    </div>
+    <div id="appContainer" class="hidden">
+        <div class="top-bar">
+            <button class="btn-toggle" onclick="exitApp()">EXIT</button>
+            <input id="addrInput" placeholder="Enter Address..." value="Richmond, VA">
+            <button class="btn-go" onclick="searchAddr()">GO</button>
+            <div class="top-toggles">
+                <button class="btn-toggle" id="t-str" onclick="switchLayer('str')">STR</button>
+                <button class="btn-toggle active" id="t-sat" onclick="switchLayer('sat')">SAT</button>
+                <button class="btn-toggle" id="t-ter" onclick="switchLayer('ter')">TER</button>
+                <button class="btn-toggle" id="t-nvg" onclick="toggleNVG()">NVG</button>
+            </div>
+        </div>
+        <div class="perimeter-slider">
+            <span>PERIMETER:</span>
+            <input type="range" id="radiusSlider" min="100" max="5000" value="2500" oninput="adjustPerimeter(this.value)">
+            <span id="radiusVal" style="min-width:60px;text-align:right;">2500 FT</span>
+            <span id="liveCount" style="margin-left:10px;color:gold;">0 LIVE</span>
+        </div>
+        <div class="map-wrapper">
+            <div id="offlineInd">⚠ NO SIGNAL - CACHED MAP</div>
+            <div id="toast"></div>
+            <div id="map"></div>
+        </div>
+        <div class="bottom-bar">
+            <button class="btn-tac btn-officer-down" onclick="triggerOfficerDown()">🚨 DOWN</button>
+            <button class="btn-tac" id="btn-gps" onclick="toggleLiveGPS()">📡 LIVE GPS</button>
+            <button class="btn-tac" onclick="openMarkerModal()">📍 MARK</button>
+            <button class="btn-tac" onclick="clearMap()">🛑 CLEAR</button>
+        </div>
+    </div>
+    <div id="markerModal" class="modal-overlay hidden" onclick="if(event.target===this) this.classList.add('hidden')">
+        <div class="modal-box">
+            <h3>SELECT UNIT / MARKER</h3>
+            <div class="grid-items">
+                <button class="grid-btn" onclick="placeMarker('LE')"><span>🔵</span>LE</button>
+                <button class="grid-btn" onclick="placeMarker('K9')"><span>🔘</span>K9</button>
+                <button class="grid-btn" onclick="placeMarker('SAR')"><span>🔴</span>SAR</button>
+                <button class="grid-btn" onclick="placeMarker('CIV')"><span>🟢</span>CIV</button>
+            </div>
+        </div>
+    </div>
+    <div id="downAlert"><div class="down-alert-content"><h1>🚨 OFFICER DOWN 🚨</h1><h2 id="downName">UNKNOWN</h2><p id="downDept">DEPT: N/A</p><p id="downGps">GPS: N/A</p><button class="ack-btn" onclick="cancelOfficerDown()">ACKNOWLEDGE</button></div></div>
+
+    <!-- Firebase COMPAT SDK - FIXED - was using modular SDK incorrectly -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        let fbDb = null;
+        let map, currentLayer, drawingLayers=[], activeType=null;
+        let perimeterCenter=[37.5407,-77.4360], perimeterCircle=null, centerRedDot=null;
+        let userMarker=null, watchId=null;
+        let currentUserName='UNKNOWN', currentUserDept='N/A';
+        let currentUserId = 'user-' + Math.random().toString(36).substr(2,9);
+        let otherMarkers={};
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFzxwNI8eLhjlsZQf_sKpboe_zqLkNZfg",
+            authDomain: "tacnet-law-enforcement.firebaseapp.com",
+            databaseURL: "https://tacnet-law-enforcement-default-rtdb.firebaseio.com",
+            projectId: "tacnet-law-enforcement",
+            storageBucket: "tacnet-law-enforcement.firebasestorage.app",
+            messagingSenderId: "85046927848",
+            appId: "1:85046927848:web:8ebe08d72b9d252e50445d",
+            measurementId: "G-KMZK35RRCY"
+        };
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            fbDb = firebase.database();
+            document.getElementById('firebaseStatus').innerText = "FIREBASE: CONNECTED - ID " + currentUserId;
+            console.log("Firebase OK", currentUserId);
+        } catch(e) {
+            console.error("Firebase init error", e);
+            document.getElementById('firebaseStatus').innerText = "FIREBASE ERROR: " + e.message;
+        }
+
+        function enterApp(){
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+        }
+        function toggleAccessCode(){
+            let role=document.getElementById('roleSelect').value;
+            let codeInput=document.getElementById('accessCode');
+            if(role==='admin' || role==='commander') codeInput.classList.remove('hidden');
+            else codeInput.classList.add('hidden');
+        }
+        function attemptLogin(){
+            let role=document.getElementById('roleSelect').value;
+            let code=document.getElementById('accessCode').value;
+            if(role==='admin' && code!=='1041'){alert("INVALID ADMIN CODE");return;}
+            if(role==='commander' && code!=='1042'){alert("INVALID COMMANDER CODE");return;}
+            currentUserName=document.getElementById('loginName').value || 'OFFICER-' + currentUserId.substr(-4);
+            currentUserDept=document.getElementById('loginDept').value || 'N/A';
+            startApp();
+        }
+        function startApp(){
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('appContainer').classList.remove('hidden');
+            setTimeout(initMap,100);
+        }
+        function exitApp(){ if(fbDb && watchId!==null){ fbDb.ref('officers/'+currentUserId).remove(); } location.reload(); }
+        function showToast(msg){ let t=document.getElementById('toast'); t.innerText=msg; t.style.display='block'; clearTimeout(t.timer); t.timer=setTimeout(()=>t.style.display='none',3000); }
+
+        function initMap(){
+            map = L.map('map',{zoomControl:false,attributionControl:false,maxZoom:22}).setView(perimeterCenter,13);
+            L.control.zoom({position:'topright'}).addTo(map);
+            currentLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map);
+            drawPerimeter(2500);
+            
+            // FIXED REAL-TIME LISTENER - This was broken before
+            if(fbDb){
+                showToast("MULTIPLAYER TOWER: CONNECTED");
+                fbDb.ref('officers').on('value',(snapshot)=>{
+                    const data=snapshot.val() || {};
+                    document.getElementById('liveCount').innerText = Object.keys(data).length + " LIVE";
+                    
+                    // Remove old markers not in DB
+                    for(let id in otherMarkers){
+                        if(!data[id]){ map.removeLayer(otherMarkers[id]); delete otherMarkers[id]; }
+                    }
+                    // Add / update markers
+                    for(let id in data){
+                        if(id===currentUserId) continue; // Don't show self twice
+                        let off=data[id];
+                        if(off && off.lat && off.lng){
+                            if(otherMarkers[id]){
+                                otherMarkers[id].setLatLng([off.lat, off.lng]);
+                                otherMarkers[id].getTooltip().setContent(off.name + " (" + off.dept + ")");
+                            } else {
+                                // GREEN for other devices, BLUE for you - so you can tell them apart
+                                let mIcon = L.divIcon({
+                                    className:'gps-flash-icon',
+                                    html:'<div class="gps-pulse-ring" style="background:rgba(0,255,0,0.4);"></div><div class="gps-dot-center" style="background:#00ff41;box-shadow:0 0 8px #00ff41;"></div>',
+                                    iconSize:[20,20], iconAnchor:[10,10]
+                                });
+                                otherMarkers[id] = L.marker([off.lat, off.lng],{icon:mIcon}).addTo(map);
+                                otherMarkers[id].bindTooltip(off.name, {permanent:true,direction:'top',offset:[0,-10]});
+                                showToast("NEW OFFICER JOINED: " + off.name);
+                            }
+                        }
+                    }
+                });
+                // Auto-remove on disconnect
+                fbDb.ref('.info/connected').on('value',(snap)=>{
+                    if(snap.val()===true){
+                        fbDb.ref('officers/'+currentUserId).onDisconnect().remove();
+                    }
+                });
+            } else {
+                showToast("MULTIPLAYER TOWER: OFFLINE - CHECK FIREBASE");
+            }
+
+            map.on('click',e=>{
+                if(activeType){
+                    let m = L.circleMarker(e.latlng,{radius:12,fillColor:'blue',color:'white',fillOpacity:1,weight:2}).addTo(map);
+                    m.bindTooltip(activeType,{permanent:true,direction:'top'});
+                    m.on('click',()=>map.removeLayer(m));
+                    activeType=null;
+                }
+            });
+        }
+
+        function searchAddr(){
+            let q=document.getElementById('addrInput').value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}`)
+                .then(r=>r.json()).then(d=>{ if(d[0]){ perimeterCenter=[d[0].lat,d[0].lon]; map.setView(perimeterCenter,15); drawPerimeter(document.getElementById('radiusSlider').value); showToast("TARGET LOCATED"); } });
+        }
+        function drawPerimeter(ft){
+            if(perimeterCircle) map.removeLayer(perimeterCircle);
+            if(centerRedDot) map.removeLayer(centerRedDot);
+            perimeterCircle = L.circle(perimeterCenter,{radius:ft/3.28084,color:'#00ff41',fillColor:'#00ff41',fillOpacity:0.1,weight:3,dashArray:'5,5',interactive:false}).addTo(map);
+            centerRedDot = L.circleMarker(perimeterCenter,{radius:6,fillColor:'red',color:'red',fillOpacity:1,weight:1,interactive:false}).addTo(map);
+        }
+        function adjustPerimeter(val){ document.getElementById('radiusVal').innerText=val+" FT"; drawPerimeter(parseFloat(val)); }
+        function switchLayer(type){
+            map.removeLayer(currentLayer);
+            document.querySelectorAll('.top-toggles .btn-toggle').forEach(b=>b.classList.remove('active'));
+            if(type==='str'){ currentLayer=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:22}).addTo(map); document.getElementById('t-str').classList.add('active'); }
+            if(type==='sat'){ currentLayer=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map); document.getElementById('t-sat').classList.add('active'); }
+            if(type==='ter'){ currentLayer=L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}',{maxZoom:22}).addTo(map); document.getElementById('t-ter').classList.add('active'); }
+        }
+        function toggleNVG(){ document.getElementById('map').classList.toggle('nvg-active'); document.getElementById('t-nvg').classList.toggle('active'); }
+        function openMarkerModal(){ document.getElementById('markerModal').classList.remove('hidden'); }
+        function placeMarker(type){ activeType=type; document.getElementById('markerModal').classList.add('hidden'); showToast("TAP MAP TO DROP "+type); }
+        function clearMap(){ map.eachLayer(l=>{ if(l instanceof L.CircleMarker && l!==centerRedDot) map.removeLayer(l); }); }
+
+        function toggleLiveGPS(){
+            let btn=document.getElementById('btn-gps');
+            if(watchId!==null){
+                navigator.geolocation.clearWatch(watchId); watchId=null; btn.classList.remove('active'); showToast("LIVE GPS STOPPED");
+                if(fbDb) fbDb.ref('officers/'+currentUserId).remove();
+                if(userMarker){ map.removeLayer(userMarker); userMarker=null; }
+                return;
+            }
+            if(!navigator.geolocation){ showToast("GPS NOT SUPPORTED"); return; }
+            btn.classList.add('active');
+            showToast("REQUESTING GPS... TAP ALLOW");
+            watchId=navigator.geolocation.watchPosition(pos=>{
+                let latlng=[pos.coords.latitude,pos.coords.longitude];
+                if(!userMarker){
+                    let flashIcon = L.divIcon({className:'gps-flash-icon',html:'<div class="gps-pulse-ring"></div><div class="gps-dot-center" style="background:#00ffff;box-shadow:0 0 8px #00ffff;"></div>',iconSize:[20,20],iconAnchor:[10,10]});
+                    userMarker=L.marker(latlng,{icon:flashIcon}).addTo(map);
+                    userMarker.bindTooltip("YOU - "+currentUserName,{permanent:true,direction:'top',offset:[0,-10]});
+                    map.setView(latlng,18);
+                    showToast("GPS LOCK ACQUIRED - BROADCASTING TO TEAM");
+                } else { userMarker.setLatLng(latlng); }
+                if(fbDb){
+                    fbDb.ref('officers/'+currentUserId).set({name:currentUserName,dept:currentUserDept,lat:pos.coords.latitude,lng:pos.coords.longitude,timestamp:Date.now()});
+                }
+            },err=>{
+                if(err.code===1){ showToast("GPS BLOCKED: Check iPhone Settings > Privacy > Location"); btn.classList.remove('active'); if(watchId) navigator.geolocation.clearWatch(watchId); watchId=null; }
+            },{enableHighAccuracy:true,maximumAge:0,timeout:60000});
+        }
+        function triggerOfficerDown(){
+            document.getElementById('downName').innerText=currentUserName;
+            document.getElementById('downDept').innerText="DEPT: "+currentUserDept;
+            if(userMarker){ let ll=userMarker.getLatLng(); document.getElementById('downGps').innerText="GPS: "+ll.lat.toFixed(5)+", "+ll.lng.toFixed(5); }
+            document.getElementById('downAlert').style.display='flex';
+        }
+        function cancelOfficerDown(){ document.getElementById('downAlert').style.display='none'; }
+        window.addEventListener('beforeunload',()=>{ if(fbDb && watchId!==null){ fbDb.ref('officers/'+currentUserId).remove(); } });
+    </script>
+</body>
+</html>
