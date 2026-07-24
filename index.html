@@ -430,7 +430,7 @@
             
             window.addEventListener('offline', () => document.getElementById('offlineInd').style.display = 'block');
             window.addEventListener('online', () => document.getElementById('offlineInd').style.display = 'none');
-
+if (fbDb) { showToast("MULTIPLAYER TOWER: CONNECTED"); } else { showToast("MULTIPLAYER TOWER: OFFLINE"); }
             const mapContainer = map.getContainer();
 
             function getLatLngFromEvent(e) {
