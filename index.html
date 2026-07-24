@@ -819,14 +819,16 @@
 
     <script>
         // --- PASTE YOUR FIREBASE KEYS HERE ---
-        const firebaseConfig = {
-       var admin = require("firebase-admin");
-
-var serviceAccount = require("path/to/serviceAccountKey.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://tacnet-law-enforcement-default-rtdb.firebaseio.com"
+       const firebaseConfig = {
+  apiKey: "AIzaSyDFzxwNI8eLhjlsZQf_sKpboe_zqLkNZfg",
+  authDomain: "tacnet-law-enforcement.firebaseapp.com",
+  databaseURL: "https://tacnet-law-enforcement-default-rtdb.firebaseio.com",
+  projectId: "tacnet-law-enforcement",
+  storageBucket: "tacnet-law-enforcement.firebasestorage.app",
+  messagingSenderId: "85046927848",
+  appId: "1:85046927848:web:8ebe08d72b9d252e50445d",
+  measurementId: "G-KMZK35RRCY"
+};
 });
 
         };
