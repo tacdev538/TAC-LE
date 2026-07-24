@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -202,13 +201,13 @@ let html='';
 for(let id in d){
 let o=d[id];
 let col=roleColors[o.role]||'#00ff41';
-html+=`<div class="rItem"><span class="dotSm" style="background:${col}"></span> ${o.name} - ${o.dept}</div>`;
+html+=`<div class="rItem" onclick="centerOn('${id}')" style="cursor:pointer"><span class="dotSm" style="background:${col}"></span> ${o.name} - ${o.dept}</div>`;
 if(id===myId)continue;
 if(other[id]){other[id].setLatLng([o.lat,o.lng]);other[id].getTooltip().setContent(o.name+' - '+o.dept);}
 else{
 let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}88"></div><div class="dotC" style="background:${col}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
 other[id]=L.marker([o.lat,o.lng],{icon:ic}).addTo(map);
-other[id].bindTooltip(o.name+' - '+o.dept,{permanent:true,direction:'top'});
+other[id].bindTooltip(o.name+' - '+o.dept,{permanent:false,direction:'top',offset:[0,-8]});
 }
 }
 if(!count)html='No one yet';
@@ -240,8 +239,11 @@ if(isLock)return;
 if(activeMark){
 let col={LE:'blue',K9:'#00bfff',SAR:'red',CIV:'#00ff41',ART:'orange',CP:'yellow',DRN:'gray',SUS:'purple',VEH:'black'}[activeMark]||'blue';
 let mk=L.circleMarker(e.latlng,{radius:11,fillColor:col,color:'#fff',weight:2,fillOpacity:1}).addTo(map);
-mk.bindTooltip(activeMark+' - '+myName,{permanent:true});
-mk.on('click',()=>map.removeLayer(mk));
+mk.bindTooltip(activeMark+' - '+myName,{permanent:false,direction:'top',offset:[0,-8]});
+let pressTimer=null;
+mk.on('mousedown touchstart',()=>{pressTimer=setTimeout(()=>{map.removeLayer(mk);toast(activeMark+' REMOVED - HOLD TO DELETE');},800);});
+mk.on('mouseup mouseout touchend',()=>{if(pressTimer)clearTimeout(pressTimer);});
+
 logA('MARK', activeMark+' at '+e.latlng.lat.toFixed(5));
 activeMark=null;
 }
@@ -284,7 +286,7 @@ let ll=[p.coords.latitude,p.coords.longitude];
 if(!userM){
 let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${myColor}88"></div><div class="dotC" style="background:${myColor}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
 userM=L.marker(ll,{icon:ic}).addTo(map);
-userM.bindTooltip('YOU - '+myName+' - '+myDept,{permanent:true});
+userM.bindTooltip('YOU - '+myName+' - '+myDept,{permanent:false,direction:'top'});
 map.setView(ll,18);
 }else userM.setLatLng(ll);
 if(fb)fb.ref('officers/'+myId).set({name:myName,dept:myDept,role:myRole,lat:p.coords.latitude,lng:p.coords.longitude,timestamp:Date.now()});
@@ -310,6 +312,7 @@ logA('PING DROP', myName+' dropped ping at '+lat.toFixed(5));
 traceOn=false;b.classList.remove('active');
 });
 }
+function centerOn(id){if(other[id])map.setView(other[id].getLatLng(),18); else if(id===myId && userM)map.setView(userM.getLatLng(),18); toast('CENTERED');}
 function openReplay(){
 document.getElementById('replayLog').innerHTML=sLog.map(x=>`<div>[${x.time}] ${x.action}: ${x.detail}</div>`).join('')||'No log';
 document.getElementById('replayM').classList.remove('hidden');
@@ -323,7 +326,15 @@ document.getElementById('repLog').innerHTML=sLog.map(x=>`<div>[${x.time}] ${x.ac
 document.getElementById('reportM').classList.remove('hidden');
 }
 function emailReport(){
-let body=`TACNET FINAL REPORT\nDate: ${document.getElementById('repDate').value}\nLocation: ${document.getElementById('repLoc').value}\nType: ${document.getElementById('repInc').value}\nDisp: ${document.getElementById('repDisp').value}\nNotes: ${document.getElementById('repNotes').value}\n\nLOG:\n`+sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');
+let body=`TACNET FINAL REPORT
+Date: ${document.getElementById('repDate').value}
+Location: ${document.getElementById('repLoc').value}
+Type: ${document.getElementById('repInc').value}
+Disp: ${document.getElementById('repDisp').value}
+Notes: ${document.getElementById('repNotes').value}
+
+LOG:
+`+sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');
 window.location.href='mailto:?subject=TACNET Final Report&body='+encodeURIComponent(body);
 }
 </script>
