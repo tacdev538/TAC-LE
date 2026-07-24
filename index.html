@@ -54,9 +54,9 @@
 .box h3{color:var(--gold);text-align:center;margin-bottom:10px;font-size:14px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .gbtn{background:#000;border:1px solid var(--g);color:var(--g);padding:10px 0;border-radius:6px;font-size:10px;font-weight:800;cursor:pointer}
-.flash{width:18px;height:18px;position:relative}
-.dotC{width:10px;height:10px;border-radius:50%;border:2px solid #000;position:absolute;top:4px;left:4px}
-.ring{width:18px;height:18px;border-radius:50%;position:absolute;top:0;left:0;animation:ping 1.5s infinite}
+.flash{width:40px;height:40px;position:relative}
+.dotC{width:22px;height:22px;border-radius:50%;border:3px solid #fff;position:absolute;top:9px;left:9px;box-shadow:0 0 12px #000, 0 0 18px currentColor}
+.ring{width:40px;height:40px;border-radius:50%;position:absolute;top:0;left:0;animation:ping 1.5s infinite;border:2px solid currentColor}
 @keyframes ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(2.5);opacity:0}}
 #downA{position:fixed;inset:0;background:rgba(255,0,0,0.93);z-index:9000;display:none;align-items:center;justify-content:center}
 .downB{background:#000;border:4px solid #fff;padding:25px;border-radius:10px;text-align:center;max-width:90%}
@@ -205,7 +205,7 @@ html+=`<div class="rItem" onclick="centerOn('${id}')" style="cursor:pointer"><sp
 if(id===myId)continue;
 if(other[id]){other[id].setLatLng([o.lat,o.lng]);other[id].getTooltip().setContent(o.name+' - '+o.dept);}
 else{
-let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}88"></div><div class="dotC" style="background:${col}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
+let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${col}88"></div><div class="dotC" style="background:${col}"></div>`,iconSize:[40,40],iconAnchor:[20,20]});
 other[id]=L.marker([o.lat,o.lng],{icon:ic}).addTo(map);
 other[id].bindTooltip(o.name+' - '+o.dept,{permanent:false,direction:'top',offset:[0,-8]});
 }
@@ -277,21 +277,41 @@ if(redPen){if(isLock)toggleLock();map.dragging.disable();toast('🔴 RED PEN ON 
 function eraseLast(){if(drawLayers.length){map.removeLayer(drawLayers.pop());toast('ERASED');}else toast('NOTHING');}
 function toggleLock(){isLock=!isLock;document.getElementById('bb-lock').classList.toggle('active',isLock);
 if(isLock){map.dragging.disable();map.touchZoom.disable();toast('LOCKED');}else{map.dragging.enable();map.touchZoom.enable();toast('UNLOCKED');}}
+
+let accCircle=null;
 function toggleGPS(){
 let b=document.getElementById('bb-gps');
-if(watch!==null){navigator.geolocation.clearWatch(watch);watch=null;b.classList.remove('active');if(fb)fb.ref('officers/'+myId).remove();if(userM){map.removeLayer(userM);userM=null;}toast('GPS OFF');return;}
-b.classList.add('active');toast('GPS ACQUIRING...');
+if(watch!==null){navigator.geolocation.clearWatch(watch);watch=null;b.classList.remove('active');if(fb)fb.ref('officers/'+myId).remove();if(userM){map.removeLayer(userM);userM=null;}if(accCircle){map.removeLayer(accCircle);accCircle=null;}toast('GPS OFF');return;}
+if(!navigator.geolocation){toast('NO GPS');return;}
+b.classList.add('active');toast('GPS LOCKING - STAY STILL 10 SEC - HIGH ACCURACY...');
 watch=navigator.geolocation.watchPosition(p=>{
 let ll=[p.coords.latitude,p.coords.longitude];
+let acc=p.coords.accuracy||0;
 if(!userM){
-let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${myColor}88"></div><div class="dotC" style="background:${myColor}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});
+let ic=L.divIcon({className:'flash',html:`<div class="ring" style="background:${myColor}88"></div><div class="dotC" style="background:${myColor}"></div>`,iconSize:[40,40],iconAnchor:[20,20]});
 userM=L.marker(ll,{icon:ic}).addTo(map);
-userM.bindTooltip('YOU - '+myName+' - '+myDept,{permanent:false,direction:'top'});
+userM.bindTooltip('YOU - '+myName+' - '+myDept+' ('+Math.round(acc)+'m)',{permanent:false,direction:'top'});
+accCircle=L.circle(ll,{radius:acc,color:myColor,fillColor:myColor,fillOpacity:0.15,weight:2}).addTo(map);
 map.setView(ll,18);
-}else userM.setLatLng(ll);
-if(fb)fb.ref('officers/'+myId).set({name:myName,dept:myDept,role:myRole,lat:p.coords.latitude,lng:p.coords.longitude,timestamp:Date.now()});
-},e=>{if(e.code===1)toast('ALLOW LOCATION');b.classList.remove('active');},{enableHighAccuracy:true,maximumAge:0,timeout:60000});
+toast('LOCKED +/-'+Math.round(acc)+'m - BIG DOT - OTHERS WILL SEE YOU');
+}else{
+userM.setLatLng(ll);
+if(accCircle)accCircle.setLatLng(ll).setRadius(acc);
+userM.getTooltip().setContent('YOU - '+myName+' - '+myDept+' ('+Math.round(acc)+'m)');
 }
+if(fb){
+fb.ref('officers/'+myId).set({name:myName,dept:myDept,role:myRole,color:myColor,lat:p.coords.latitude,lng:p.coords.longitude,acc:acc,timestamp:Date.now()});
+console.log('WROTE TO FIREBASE',myId,p.coords.latitude);
+}
+},e=>{
+if(e.code===1){toast('DENIED - Settings > Privacy > Location > Allow');}
+if(e.code===2){toast('GPS WEAK - Go outside');}
+if(e.code===3){toast('TIMEOUT - Retrying');}
+console.log(e);
+b.classList.remove('active');
+},{enableHighAccuracy:true,maximumAge:0,timeout:30000});
+}
+
 function triggerDown(){
 let lat=perimC[0],lng=perimC[1];
 if(userM){let ll=userM.getLatLng();lat=ll.lat;lng=ll.lng;}
@@ -326,15 +346,7 @@ document.getElementById('repLog').innerHTML=sLog.map(x=>`<div>[${x.time}] ${x.ac
 document.getElementById('reportM').classList.remove('hidden');
 }
 function emailReport(){
-let body=`TACNET FINAL REPORT
-Date: ${document.getElementById('repDate').value}
-Location: ${document.getElementById('repLoc').value}
-Type: ${document.getElementById('repInc').value}
-Disp: ${document.getElementById('repDisp').value}
-Notes: ${document.getElementById('repNotes').value}
-
-LOG:
-`+sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');
+let body=`TACNET FINAL REPORT\nDate: ${document.getElementById('repDate').value}\nLocation: ${document.getElementById('repLoc').value}\nType: ${document.getElementById('repInc').value}\nDisp: ${document.getElementById('repDisp').value}\nNotes: ${document.getElementById('repNotes').value}\n\nLOG:\n`+sLog.map(x=>`[${x.time}] ${x.action}: ${x.detail}`).join('\n');
 window.location.href='mailto:?subject=TACNET Final Report&body='+encodeURIComponent(body);
 }
 </script>
